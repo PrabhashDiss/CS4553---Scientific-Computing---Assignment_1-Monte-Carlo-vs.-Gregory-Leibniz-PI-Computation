@@ -2,6 +2,7 @@
 #include <algorithm> // For sort
 #include <chrono>
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <future>
@@ -105,6 +106,49 @@ void printCudaInfo() {
     std::cout << "CUDA not supported on this compiler.\n";
 }
 #endif
+
+// Structure to hold the statistics.
+struct Stats {
+    double avgTime;
+    double p25;
+    double median;
+    double p75;
+    double avgValue;
+    double lastValue;
+};
+
+// Generic measurement function that accepts a simulation function and its arguments.
+template<typename Func, typename... Args>
+Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
+    Stats stats;
+    std::vector<double> times;
+    std::vector<double> values;
+    
+    for (int i = 0; i < iterations; i++) {
+        auto start = std::chrono::high_resolution_clock::now();
+        double result = simulation(std::forward<Args>(args)...);
+        auto end = std::chrono::high_resolution_clock::now();
+        double elapsed = std::chrono::duration<double>(end - start).count();
+        times.push_back(elapsed);
+        values.push_back(result);
+        stats.lastValue = result;
+    }
+    
+    // Compute average value.
+    stats.avgValue = std::accumulate(values.begin(), values.end(), 0.0) / values.size();
+    // Compute average time.
+    stats.avgTime = std::accumulate(times.begin(), times.end(), 0.0) / times.size();
+    
+    // Compute percentiles for times.
+    std::vector<double> sortedTimes = times;
+    std::sort(sortedTimes.begin(), sortedTimes.end());
+    size_t n = sortedTimes.size();
+    stats.p25 = sortedTimes[static_cast<size_t>(0.25 * n)];
+    stats.median = sortedTimes[static_cast<size_t>(0.5 * n)];
+    stats.p75 = sortedTimes[static_cast<size_t>(0.75 * n)];
+    
+    return stats;
+}
 
 // ======================================================================
 // Utility: Compute Required Trials as String
@@ -443,36 +487,44 @@ int main() {
         // unsigned long long trials = computeActualTrials(precision);
         // std::cout << "Using " << trials << " trials for simulation.\n";
         
+        const int iterationsCount = 10;
+        
         // Set output precision for simulation results
         std::cout << std::fixed << std::setprecision(precision);
         
         // ---------------------------------------------------
         // Monte Carlo: Single-threaded
-        auto start = std::chrono::high_resolution_clock::now();
-        double pi_single = monte_carlo_pi_singlethreaded(trials);
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = end - start;
-        std::cout << "Monte Carlo (Single-threaded): " << pi_single 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats mcSingleThreadedStats = measureSimulation(iterationsCount, monte_carlo_pi_singlethreaded, trials);
+        std::cout << "Monte Carlo Single-threaded:\n"
+              << "  Average PI Value: " << mcSingleThreadedStats.avgValue << "\n"
+              << "  Last PI Value:    " << mcSingleThreadedStats.lastValue << "\n"
+              << "  Average Time:     " << mcSingleThreadedStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcSingleThreadedStats.p25 << " s\n"
+              << "  Median Time:      " << mcSingleThreadedStats.median << " s\n"
+              << "  75th Percentile:  " << mcSingleThreadedStats.p75 << " s\n\n";
         
         // ---------------------------------------------------
         // Monte Carlo: Multi-threaded
-        start = std::chrono::high_resolution_clock::now();
-        double pi_multi = monte_carlo_pi_multithreaded(trials, num_threads);
-        end = std::chrono::high_resolution_clock::now();
-        elapsed = end - start;
-        std::cout << "Monte Carlo (Multi-threaded):  " << pi_multi 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats mcMultiThreadedStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded, trials, num_threads);
+        std::cout << "Monte Carlo Multi-threaded:\n"
+              << "  Average PI Value: " << mcMultiThreadedStats.avgValue << "\n"
+              << "  Last PI Value:    " << mcMultiThreadedStats.lastValue << "\n"
+              << "  Average Time:     " << mcMultiThreadedStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcMultiThreadedStats.p25 << " s\n"
+              << "  Median Time:      " << mcMultiThreadedStats.median << " s\n"
+              << "  75th Percentile:  " << mcMultiThreadedStats.p75 << " s\n\n";
         
 #ifdef __unix__
         // ---------------------------------------------------
         // Monte Carlo: Multiprocessing
-        start = std::chrono::high_resolution_clock::now();
-        double pi_proc = monte_carlo_pi_multiprocessing(trials, num_processes);
-        end = std::chrono::high_resolution_clock::now();
-        elapsed = end - start;
-        std::cout << "Monte Carlo (Multiprocessing): " << pi_proc 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats mcMultiProcessStats = measureSimulation(iterationsCount, monte_carlo_pi_multiprocessing, trials, num_processes);
+        std::cout << "Monte Carlo Multiprocessing:\n"
+              << "  Average PI Value: " << mcMultiProcessStats.avgValue << "\n"
+              << "  Last PI Value:    " << mcMultiProcessStats.lastValue << "\n"
+              << "  Average Time:     " << mcMultiProcessStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcMultiProcessStats.p25 << " s\n"
+              << "  Median Time:      " << mcMultiProcessStats.median << " s\n"
+              << "  75th Percentile:  " << mcMultiProcessStats.p75 << " s\n\n";
 #else
         std::cout << "Monte Carlo (Multiprocessing): Not supported on this OS.\n";
 #endif
@@ -480,43 +532,51 @@ int main() {
 #ifdef __CUDACC__
         // ---------------------------------------------------
         // Monte Carlo: CUDA
-        start = std::chrono::high_resolution_clock::now();
-        double pi_cuda = monte_carlo_pi_cuda(trials);
-        end = std::chrono::high_resolution_clock::now();
-        elapsed = end - start;
-        std::cout << "Monte Carlo (CUDA):            " << pi_cuda 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats mcCudaStats = measureSimulation(iterationsCount, monte_carlo_pi_cuda, trials);
+        std::cout << "Monte Carlo CUDA:\n"
+              << "  Average PI Value: " << mcCudaStats.avgValue << "\n"
+              << "  Last PI Value:    " << mcCudaStats.lastValue << "\n"
+              << "  Average Time:     " << mcCudaStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcCudaStats.p25 << " s\n"
+              << "  Median Time:      " << mcCudaStats.median << " s\n"
+              << "  75th Percentile:  " << mcCudaStats.p75 << " s\n\n";
 #else
         std::cout << "Monte Carlo (CUDA): Not supported on this compiler.\n";
 #endif
 
         // ---------------------------------------------------
         // Gregory-Leibniz Series: Single-threaded
-        start = std::chrono::high_resolution_clock::now();
-        double pi_greg_single = gregory_leibniz_pi_singlethreaded(iterations);
-        end = std::chrono::high_resolution_clock::now();
-        elapsed = end - start;
-        std::cout << "Gregory-Leibniz (Single-threaded): " << pi_greg_single 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats glSingleThreadedStats = measureSimulation(iterationsCount, gregory_leibniz_pi_singlethreaded, iterations);
+        std::cout << "Gregory-Leibniz Single-threaded:\n"
+              << "  Average PI Value: " << glSingleThreadedStats.avgValue << "\n"
+              << "  Last PI Value:    " << glSingleThreadedStats.lastValue << "\n"
+              << "  Average Time:     " << glSingleThreadedStats.avgTime << " s\n"
+              << "  25th Percentile:  " << glSingleThreadedStats.p25 << " s\n"
+              << "  Median Time:      " << glSingleThreadedStats.median << " s\n"
+              << "  75th Percentile:  " << glSingleThreadedStats.p75 << " s\n\n";
         
         // ---------------------------------------------------
         // Gregory-Leibniz Series: Multi-threaded
-        start = std::chrono::high_resolution_clock::now();
-        double pi_greg = gregory_leibniz_pi_multithreaded(iterations, num_threads);
-        end = std::chrono::high_resolution_clock::now();
-        elapsed = end - start;
-        std::cout << "Gregory-Leibniz (Multi-threaded): " << pi_greg 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats glMultiThreadedStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multithreaded, iterations, num_threads);
+        std::cout << "Gregory-Leibniz Multi-threaded:\n"
+              << "  Average PI Value: " << glMultiThreadedStats.avgValue << "\n"
+              << "  Last PI Value:    " << glMultiThreadedStats.lastValue << "\n"
+              << "  Average Time:     " << glMultiThreadedStats.avgTime << " s\n"
+              << "  25th Percentile:  " << glMultiThreadedStats.p25 << " s\n"
+              << "  Median Time:      " << glMultiThreadedStats.median << " s\n"
+              << "  75th Percentile:  " << glMultiThreadedStats.p75 << " s\n\n";
         
 #ifdef __unix__
         // ---------------------------------------------------
         // Gregory-Leibniz Series: Multiprocessing
-        start = std::chrono::high_resolution_clock::now();
-        double pi_greg_proc = gregory_leibniz_pi_multiprocessing(iterations, num_processes);
-        end = std::chrono::high_resolution_clock::now();
-        elapsed = end - start;
-        std::cout << "Gregory-Leibniz (Multiprocessing): " << pi_greg_proc 
-                  << ", Time: " << elapsed.count() << " s\n";
+        Stats glMultiProcessStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multiprocessing, iterations, num_processes);
+        std::cout << "Gregory-Leibniz Multiprocessing:\n"
+              << "  Average PI Value: " << glMultiProcessStats.avgValue << "\n"
+              << "  Last PI Value:    " << glMultiProcessStats.lastValue << "\n"
+              << "  Average Time:     " << glMultiProcessStats.avgTime << " s\n"
+              << "  25th Percentile:  " << glMultiProcessStats.p25 << " s\n"
+              << "  Median Time:      " << glMultiProcessStats.median << " s\n"
+              << "  75th Percentile:  " << glMultiProcessStats.p75 << " s\n\n";
 #else
         std::cout << "Gregory-Leibniz (Multiprocessing): Not supported on this OS.\n";
 #endif
