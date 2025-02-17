@@ -149,7 +149,6 @@ struct Stats {
     double median;
     double p75;
     double avgValue;
-    double lastValue;
 };
 
 // Generic measurement function that accepts a simulation function and its arguments.
@@ -166,7 +165,6 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
         double elapsed = std::chrono::duration<double>(end - start).count();
         times.push_back(elapsed);
         values.push_back(result);
-        stats.lastValue = result;
     }
     
     // Compute average value.
@@ -500,7 +498,6 @@ int main() {
         Stats mcSingleThreadedStats = measureSimulation(iterationsCount, monte_carlo_pi_singlethreaded, trials);
         std::cout << "Monte Carlo Single-threaded:\n"
               << "  Average PI Value: " << mcSingleThreadedStats.avgValue << "\n"
-              << "  Last PI Value:    " << mcSingleThreadedStats.lastValue << "\n"
               << "  Average Time:     " << mcSingleThreadedStats.avgTime << " s\n"
               << "  25th Percentile:  " << mcSingleThreadedStats.p25 << " s\n"
               << "  Median Time:      " << mcSingleThreadedStats.median << " s\n"
@@ -511,7 +508,6 @@ int main() {
         Stats mcMultiThreadedStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded, trials, num_threads);
         std::cout << "Monte Carlo Multi-threaded:\n"
               << "  Average PI Value: " << mcMultiThreadedStats.avgValue << "\n"
-              << "  Last PI Value:    " << mcMultiThreadedStats.lastValue << "\n"
               << "  Average Time:     " << mcMultiThreadedStats.avgTime << " s\n"
               << "  25th Percentile:  " << mcMultiThreadedStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiThreadedStats.median << " s\n"
@@ -523,7 +519,6 @@ int main() {
         Stats mcMultiProcessStats = measureSimulation(iterationsCount, monte_carlo_pi_multiprocessing, trials, num_processes);
         std::cout << "Monte Carlo Multiprocessing:\n"
               << "  Average PI Value: " << mcMultiProcessStats.avgValue << "\n"
-              << "  Last PI Value:    " << mcMultiProcessStats.lastValue << "\n"
               << "  Average Time:     " << mcMultiProcessStats.avgTime << " s\n"
               << "  25th Percentile:  " << mcMultiProcessStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiProcessStats.median << " s\n"
@@ -538,7 +533,6 @@ int main() {
         Stats mcCudaStats = measureSimulation(iterationsCount, monte_carlo_pi_cuda, trials);
         std::cout << "Monte Carlo CUDA:\n"
               << "  Average PI Value: " << mcCudaStats.avgValue << "\n"
-              << "  Last PI Value:    " << mcCudaStats.lastValue << "\n"
               << "  Average Time:     " << mcCudaStats.avgTime << " s\n"
               << "  25th Percentile:  " << mcCudaStats.p25 << " s\n"
               << "  Median Time:      " << mcCudaStats.median << " s\n"
@@ -552,7 +546,6 @@ int main() {
         Stats glSingleThreadedStats = measureSimulation(iterationsCount, gregory_leibniz_pi_singlethreaded, iterations);
         std::cout << "Gregory-Leibniz Single-threaded:\n"
               << "  Average PI Value: " << glSingleThreadedStats.avgValue << "\n"
-              << "  Last PI Value:    " << glSingleThreadedStats.lastValue << "\n"
               << "  Average Time:     " << glSingleThreadedStats.avgTime << " s\n"
               << "  25th Percentile:  " << glSingleThreadedStats.p25 << " s\n"
               << "  Median Time:      " << glSingleThreadedStats.median << " s\n"
@@ -563,7 +556,6 @@ int main() {
         Stats glMultiThreadedStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multithreaded, iterations, num_threads);
         std::cout << "Gregory-Leibniz Multi-threaded:\n"
               << "  Average PI Value: " << glMultiThreadedStats.avgValue << "\n"
-              << "  Last PI Value:    " << glMultiThreadedStats.lastValue << "\n"
               << "  Average Time:     " << glMultiThreadedStats.avgTime << " s\n"
               << "  25th Percentile:  " << glMultiThreadedStats.p25 << " s\n"
               << "  Median Time:      " << glMultiThreadedStats.median << " s\n"
@@ -575,7 +567,6 @@ int main() {
         Stats glMultiProcessStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multiprocessing, iterations, num_processes);
         std::cout << "Gregory-Leibniz Multiprocessing:\n"
               << "  Average PI Value: " << glMultiProcessStats.avgValue << "\n"
-              << "  Last PI Value:    " << glMultiProcessStats.lastValue << "\n"
               << "  Average Time:     " << glMultiProcessStats.avgTime << " s\n"
               << "  25th Percentile:  " << glMultiProcessStats.p25 << " s\n"
               << "  Median Time:      " << glMultiProcessStats.median << " s\n"
