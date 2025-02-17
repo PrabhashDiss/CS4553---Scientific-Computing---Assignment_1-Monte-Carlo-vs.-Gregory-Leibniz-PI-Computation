@@ -32,7 +32,7 @@
 // ======================================================================
 void printEnvironmentInfo() {
     std::cout << "========== Environment Specifications ==========\n";
-    
+
     // Operating System
 #ifdef _WIN32
     std::cout << "Operating System: Windows\n";
@@ -75,7 +75,7 @@ void printEnvironmentInfo() {
     auto now = std::chrono::system_clock::now();
     std::time_t now_time = std::chrono::system_clock::to_time_t(now);
     std::cout << "Current Time: " << std::ctime(&now_time);
-    
+
     std::cout << "===============================================\n\n";
 }
 
@@ -158,7 +158,7 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
     Stats stats;
     std::vector<double> times;
     std::vector<double> values;
-    
+
     for (int i = 0; i < iterations; i++) {
         auto start = std::chrono::high_resolution_clock::now();
         double result = simulation(std::forward<Args>(args)...);
@@ -167,12 +167,12 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
         times.push_back(elapsed);
         values.push_back(result);
     }
-    
+
     // Compute average value.
     stats.avgValue = std::accumulate(values.begin(), values.end(), 0.0) / values.size();
     // Compute average time.
     stats.avgTime = std::accumulate(times.begin(), times.end(), 0.0) / times.size();
-    
+
     // Compute percentiles for times.
     std::vector<double> sortedTimes = times;
     std::sort(sortedTimes.begin(), sortedTimes.end());
@@ -180,7 +180,7 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
     stats.p25 = sortedTimes[static_cast<size_t>(0.25 * n)];
     stats.median = sortedTimes[static_cast<size_t>(0.5 * n)];
     stats.p75 = sortedTimes[static_cast<size_t>(0.75 * n)];
-    
+
     return stats;
 }
 
@@ -191,7 +191,7 @@ double monte_carlo_pi_singlethreaded(unsigned long long trials) {
     unsigned long long inside_circle = 0;
     std::mt19937_64 rng(std::random_device{}());
     std::uniform_real_distribution<double> dist(0.0, 1.0);
-    
+
     for (unsigned long long i = 0; i < trials; i++) {
         double x = dist(rng);
         double y = dist(rng);
@@ -208,7 +208,7 @@ void monte_carlo_worker(unsigned long long trials, double &result) {
     unsigned long long inside_circle = 0;
     std::mt19937_64 rng(std::random_device{}());
     std::uniform_real_distribution<double> dist(0.0, 1.0);
-    
+
     for (unsigned long long i = 0; i < trials; i++) {
         double x = dist(rng);
         double y = dist(rng);
@@ -222,18 +222,18 @@ double monte_carlo_pi_multithreaded(unsigned long long trials, unsigned int num_
     std::vector<double> results(num_threads, 0.0);
     std::vector<std::thread> threads;
     unsigned long long trials_per_thread = trials / num_threads;
-    
+
     for (unsigned int i = 0; i < num_threads; i++) {
         threads.emplace_back(monte_carlo_worker, trials_per_thread, std::ref(results[i]));
     }
     for (auto &t : threads) {
         t.join();
     }
-    
+
     double sum = 0.0;
     for (double r : results)
         sum += r;
-    
+
     return sum / num_threads;
 }
 
@@ -251,7 +251,7 @@ double monte_carlo_pi_multiprocessing(unsigned long long trials, unsigned int nu
             exit(EXIT_FAILURE);
         }
     }
-    
+
     for (unsigned int i = 0; i < num_processes; i++) {
         pid_t pid = fork();
         if (pid < 0) {
@@ -269,7 +269,7 @@ double monte_carlo_pi_multiprocessing(unsigned long long trials, unsigned int nu
             // Seed using random_device and pid to reduce correlation
             std::mt19937_64 rng(std::random_device{}() ^ (std::hash<pid_t>()(getpid())));
             std::uniform_real_distribution<double> dist(0.0, 1.0);
-            
+
             for (unsigned long long j = 0; j < trials_per_process; j++) {
                 double x = dist(rng);
                 double y = dist(rng);
@@ -287,7 +287,7 @@ double monte_carlo_pi_multiprocessing(unsigned long long trials, unsigned int nu
         }
         // Parent process continues to next fork.
     }
-    
+
     // Parent: read results from pipes and wait for children.
     unsigned long long total_inside_circle = 0;
     for (unsigned int i = 0; i < num_processes; i++) {
@@ -333,14 +333,14 @@ double monte_carlo_pi_cuda(unsigned long long trials) {
     unsigned long long *d_inside;
     cudaMalloc(&d_inside, sizeof(unsigned long long));
     cudaMemset(d_inside, 0, sizeof(unsigned long long));
-    
+
     int threadsPerBlock = 256;
     int blocks = 1024; // Adjust based on your GPU and trials
     monte_carlo_kernel<<<blocks, threadsPerBlock>>>(trials, d_inside);
     cudaDeviceSynchronize();
     cudaMemcpy(&h_inside, d_inside, sizeof(unsigned long long), cudaMemcpyDeviceToHost);
     cudaFree(d_inside);
-    
+
     double pi = 4.0 * static_cast<double>(h_inside) / static_cast<double>(trials);
     return pi;
 }
@@ -377,18 +377,18 @@ void gregory_leibniz_worker(unsigned long long start, unsigned long long end, un
 double gregory_leibniz_pi_multithreaded(unsigned long long iterations, unsigned int num_threads) {
     std::vector<double> results(num_threads, 0.0);
     std::vector<std::thread> threads;
-    
+
     for (unsigned int i = 0; i < num_threads; i++) {
         // Each thread starts at a different index with a stride equal to num_threads.
         threads.emplace_back(gregory_leibniz_worker, i, iterations, num_threads, std::ref(results[i]));
     }
     for (auto &t : threads)
         t.join();
-    
+
     double total = 0.0;
     for (double r : results)
         total += r;
-    
+
     return 4.0 * total;
 }
 
@@ -405,7 +405,7 @@ double gregory_leibniz_pi_multiprocessing(unsigned long long iterations, unsigne
             exit(EXIT_FAILURE);
         }
     }
-    
+
     // Fork processes
     for (unsigned int i = 0; i < num_processes; i++) {
         pid_t pid = fork();
@@ -489,19 +489,19 @@ int main() {
         std::cout << "Required trials for " << precision << " decimal places: " 
                   << req_trials_str << "\n";
         std::cout << "Decimal precision set to: " << precision << " places\n";
-        
+
         // For simulation, we use the maximum allowed trials (for demo purposes)
         unsigned long long trials = max_simulation_trials;
         std::cout << "Using " << trials << " trials for simulation.\n";
         // // Use actual trials computed from precision instead of a fixed maximum.
         // unsigned long long trials = computeActualTrials(precision);
         // std::cout << "Using " << trials << " trials for simulation.\n";
-        
+
         const int iterationsCount = 10;
 
         // Set output precision for simulation results
         std::cout << std::fixed << std::setprecision(precision);
-        
+
         // ---------------------------------------------------
         // Monte Carlo: Single-threaded
         Stats mcSingleThreadedStats = measureSimulation(iterationsCount, monte_carlo_pi_singlethreaded, trials);
@@ -533,7 +533,7 @@ int main() {
                 << mcMultiThreadedStats.p25 << ","
                 << mcMultiThreadedStats.median << ","
                 << mcMultiThreadedStats.p75 << "\n";
-        
+
 #ifdef __unix__
         // ---------------------------------------------------
         // Monte Carlo: Multiprocessing
@@ -589,7 +589,7 @@ int main() {
                 << glSingleThreadedStats.p25 << ","
                 << glSingleThreadedStats.median << ","
                 << glSingleThreadedStats.p75 << "\n";
-        
+
         // ---------------------------------------------------
         // Gregory-Leibniz Series: Multi-threaded
         Stats glMultiThreadedStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multithreaded, iterations, num_threads);
@@ -605,7 +605,7 @@ int main() {
                 << glMultiThreadedStats.p25 << ","
                 << glMultiThreadedStats.median << ","
                 << glMultiThreadedStats.p75 << "\n";
-        
+
 #ifdef __unix__
         // ---------------------------------------------------
         // Gregory-Leibniz Series: Multiprocessing
@@ -628,8 +628,8 @@ int main() {
 
         std::cout << "------------------------------------------------------\n";
     }
-    
+
     outFile.close();
-    
+
     return 0;
 }
