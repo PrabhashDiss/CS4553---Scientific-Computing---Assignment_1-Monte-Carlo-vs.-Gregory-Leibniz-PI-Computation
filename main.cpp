@@ -108,6 +108,38 @@ void printCudaInfo() {
 #endif
 
 // ======================================================================
+// Utility: Compute Required Trials as String
+// ======================================================================
+std::string computeRequiredTrialsStr(int precision) {
+    // If 2*precision > 18, then 10^(2*precision) > 1e18, so we use scientific notation.
+    if (2 * precision > 18) {
+        std::ostringstream oss;
+        oss << "3e" << (2 * precision);
+        return oss.str();
+    } else {
+        double trials_d = 3 * std::pow(10, 2 * precision);
+        unsigned long long trials_val = static_cast<unsigned long long>(std::ceil(trials_d));
+        return std::to_string(trials_val);
+    }
+}
+
+// ======================================================================
+// Utility: Compute Actual Trials
+// ======================================================================
+unsigned long long computeActualTrials(int precision) {
+    // Check if the computed value fits in an unsigned long long.
+    // The maximum value for unsigned long long is about 1.8e19.
+    // For 2*precision <= 18, it should be safe.
+    if (2 * precision <= 18) {
+        return static_cast<unsigned long long>(3 * std::pow(10, 2 * precision));
+    } else {
+        std::cerr << "Precision " << precision 
+                  << " too high to compute exact trials. Using fallback value.\n";
+        return 10000000ULL; // fallback value
+    }
+}
+
+// ======================================================================
 // Utility: Generic Measurement Function
 // ======================================================================
 // Structure to hold the statistics.
@@ -151,38 +183,6 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
     stats.p75 = sortedTimes[static_cast<size_t>(0.75 * n)];
     
     return stats;
-}
-
-// ======================================================================
-// Utility: Compute Required Trials as String
-// ======================================================================
-std::string computeRequiredTrialsStr(int precision) {
-    // If 2*precision > 18, then 10^(2*precision) > 1e18, so we use scientific notation.
-    if (2 * precision > 18) {
-        std::ostringstream oss;
-        oss << "3e" << (2 * precision);
-        return oss.str();
-    } else {
-        double trials_d = 3 * std::pow(10, 2 * precision);
-        unsigned long long trials_val = static_cast<unsigned long long>(std::ceil(trials_d));
-        return std::to_string(trials_val);
-    }
-}
-
-// ======================================================================
-// Utility: Compute Actual Trials
-// ======================================================================
-unsigned long long computeActualTrials(int precision) {
-    // Check if the computed value fits in an unsigned long long.
-    // The maximum value for unsigned long long is about 1.8e19.
-    // For 2*precision <= 18, it should be safe.
-    if (2 * precision <= 18) {
-        return static_cast<unsigned long long>(3 * std::pow(10, 2 * precision));
-    } else {
-        std::cerr << "Precision " << precision 
-                  << " too high to compute exact trials. Using fallback value.\n";
-        return 10000000ULL; // fallback value
-    }
 }
 
 // ======================================================================
@@ -491,7 +491,7 @@ int main() {
         // std::cout << "Using " << trials << " trials for simulation.\n";
         
         const int iterationsCount = 10;
-        
+
         // Set output precision for simulation results
         std::cout << std::fixed << std::setprecision(precision);
         
@@ -505,7 +505,7 @@ int main() {
               << "  25th Percentile:  " << mcSingleThreadedStats.p25 << " s\n"
               << "  Median Time:      " << mcSingleThreadedStats.median << " s\n"
               << "  75th Percentile:  " << mcSingleThreadedStats.p75 << " s\n\n";
-        
+
         // ---------------------------------------------------
         // Monte Carlo: Multi-threaded
         Stats mcMultiThreadedStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded, trials, num_threads);
