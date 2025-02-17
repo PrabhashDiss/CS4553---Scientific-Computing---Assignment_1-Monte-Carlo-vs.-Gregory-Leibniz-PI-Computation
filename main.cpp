@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include <future>
 #include <iomanip>
 #include <iostream>
@@ -463,6 +464,14 @@ int main() {
     printCudaInfo();
 #endif
 
+    // Write simulation results to file
+    std::ofstream outFile("simulation_results.csv");
+    if (!outFile) {
+        std::cerr << "Error opening file for writing.\n";
+        return 1;
+    }
+    outFile << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+
     // List of target precisions: 5, 10, 15, and 20 decimal places.
     std::vector<int> precisions = {5, 10, 15, 20};
 
@@ -502,6 +511,12 @@ int main() {
               << "  25th Percentile:  " << mcSingleThreadedStats.p25 << " s\n"
               << "  Median Time:      " << mcSingleThreadedStats.median << " s\n"
               << "  75th Percentile:  " << mcSingleThreadedStats.p75 << " s\n\n";
+        outFile << precision << ",Monte Carlo Single-threaded,"
+                << mcSingleThreadedStats.avgValue << ","
+                << mcSingleThreadedStats.avgTime << ","
+                << mcSingleThreadedStats.p25 << ","
+                << mcSingleThreadedStats.median << ","
+                << mcSingleThreadedStats.p75 << "\n";
 
         // ---------------------------------------------------
         // Monte Carlo: Multi-threaded
@@ -512,6 +527,12 @@ int main() {
               << "  25th Percentile:  " << mcMultiThreadedStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiThreadedStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedStats.p75 << " s\n\n";
+        outFile << precision << ",Monte Carlo Multi-threaded,"
+                << mcMultiThreadedStats.avgValue << ","
+                << mcMultiThreadedStats.avgTime << ","
+                << mcMultiThreadedStats.p25 << ","
+                << mcMultiThreadedStats.median << ","
+                << mcMultiThreadedStats.p75 << "\n";
         
 #ifdef __unix__
         // ---------------------------------------------------
@@ -523,6 +544,12 @@ int main() {
               << "  25th Percentile:  " << mcMultiProcessStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiProcessStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiProcessStats.p75 << " s\n\n";
+        outFile << precision << ",Monte Carlo Multiprocessing,"
+                << mcMultiProcessStats.avgValue << ","
+                << mcMultiProcessStats.avgTime << ","
+                << mcMultiProcessStats.p25 << ","
+                << mcMultiProcessStats.median << ","
+                << mcMultiProcessStats.p75 << "\n";
 #else
         std::cout << "Monte Carlo (Multiprocessing): Not supported on this OS.\n";
 #endif
@@ -537,6 +564,12 @@ int main() {
               << "  25th Percentile:  " << mcCudaStats.p25 << " s\n"
               << "  Median Time:      " << mcCudaStats.median << " s\n"
               << "  75th Percentile:  " << mcCudaStats.p75 << " s\n\n";
+        outFile << precision << ",Monte Carlo CUDA,"
+                << mcCudaStats.avgValue << ","
+                << mcCudaStats.avgTime << ","
+                << mcCudaStats.p25 << ","
+                << mcCudaStats.median << ","
+                << mcCudaStats.p75 << "\n";
 #else
         std::cout << "Monte Carlo (CUDA): Not supported on this compiler.\n";
 #endif
@@ -550,6 +583,12 @@ int main() {
               << "  25th Percentile:  " << glSingleThreadedStats.p25 << " s\n"
               << "  Median Time:      " << glSingleThreadedStats.median << " s\n"
               << "  75th Percentile:  " << glSingleThreadedStats.p75 << " s\n\n";
+        outFile << precision << ",Gregory-Leibniz Single-threaded,"
+                << glSingleThreadedStats.avgValue << ","
+                << glSingleThreadedStats.avgTime << ","
+                << glSingleThreadedStats.p25 << ","
+                << glSingleThreadedStats.median << ","
+                << glSingleThreadedStats.p75 << "\n";
         
         // ---------------------------------------------------
         // Gregory-Leibniz Series: Multi-threaded
@@ -560,6 +599,12 @@ int main() {
               << "  25th Percentile:  " << glMultiThreadedStats.p25 << " s\n"
               << "  Median Time:      " << glMultiThreadedStats.median << " s\n"
               << "  75th Percentile:  " << glMultiThreadedStats.p75 << " s\n\n";
+        outFile << precision << ",Gregory-Leibniz Multi-threaded,"
+                << glMultiThreadedStats.avgValue << ","
+                << glMultiThreadedStats.avgTime << ","
+                << glMultiThreadedStats.p25 << ","
+                << glMultiThreadedStats.median << ","
+                << glMultiThreadedStats.p75 << "\n";
         
 #ifdef __unix__
         // ---------------------------------------------------
@@ -571,12 +616,20 @@ int main() {
               << "  25th Percentile:  " << glMultiProcessStats.p25 << " s\n"
               << "  Median Time:      " << glMultiProcessStats.median << " s\n"
               << "  75th Percentile:  " << glMultiProcessStats.p75 << " s\n\n";
+        outFile << precision << ",Gregory-Leibniz Multiprocessing,"
+                << glMultiProcessStats.avgValue << ","
+                << glMultiProcessStats.avgTime << ","
+                << glMultiProcessStats.p25 << ","
+                << glMultiProcessStats.median << ","
+                << glMultiProcessStats.p75 << "\n";
 #else
         std::cout << "Gregory-Leibniz (Multiprocessing): Not supported on this OS.\n";
 #endif
 
         std::cout << "------------------------------------------------------\n";
     }
+    
+    outFile.close();
     
     return 0;
 }
