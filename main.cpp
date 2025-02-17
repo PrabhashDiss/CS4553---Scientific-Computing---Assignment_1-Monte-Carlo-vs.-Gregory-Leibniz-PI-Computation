@@ -1,15 +1,17 @@
 // main.cpp
-#include <iostream>
-#include <cmath>
-#include <random>
+#include <algorithm> // For sort
 #include <chrono>
-#include <thread>
-#include <vector>
-#include <sstream>
-#include <iomanip>
-#include <future>
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <future>
+#include <iomanip>
+#include <iostream>
+#include <numeric>  // For accumulate
+#include <random>
+#include <sstream>
+#include <thread>
+#include <vector>
 
 // For multiprocessing (POSIX only)
 #ifdef __unix__
