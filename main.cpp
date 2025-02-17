@@ -107,6 +107,9 @@ void printCudaInfo() {
 }
 #endif
 
+// ======================================================================
+// Utility: Generic Measurement Function
+// ======================================================================
 // Structure to hold the statistics.
 struct Stats {
     double avgTime;
