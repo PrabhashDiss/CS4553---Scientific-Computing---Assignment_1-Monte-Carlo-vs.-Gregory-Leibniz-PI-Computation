@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Read the CSV file containing the data
-data = pd.read_csv("results_precisions.csv")
+data = pd.read_csv("results_precisions_mc.csv")
 
 # Convert the "Average PI Value" column to numeric
 data["Average PI Value"] = data["Average PI Value"].apply(pd.to_numeric, errors='coerce')
