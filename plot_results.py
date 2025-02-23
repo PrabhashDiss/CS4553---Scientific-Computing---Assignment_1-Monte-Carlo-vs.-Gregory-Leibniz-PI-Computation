@@ -28,12 +28,12 @@ plt.figure(figsize=(14, 8))
 plt.barh(data["Label"], data["Performance Score"], color="steelblue")
 plt.xlabel("Simulation Type")
 plt.ylabel("Performance Score (Accuracy / Time)")
-plt.title("Best Performing Program Based on Accuracy and Time")
+plt.title("Performance Scores Based on Accuracy and Time")
 plt.tight_layout()
 plt.show()
 
 # Save and show the plot
-plt.savefig("performance_scores.png")
+plt.savefig("performance_scores_plot.png")
 plt.show()
 
 print("Performance scores saved to performance_scores.png")
