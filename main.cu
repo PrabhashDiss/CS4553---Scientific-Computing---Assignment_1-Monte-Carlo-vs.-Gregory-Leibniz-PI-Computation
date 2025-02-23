@@ -336,7 +336,7 @@ int main() {
               << "  25th Percentile:  " << mcMultiThreadedCUDAUniformStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiThreadedCUDAUniformStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedCUDAUniformStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using CUDA with Uniform Sampling,"
+        outFileTrials << precision << ",Monte Carlo Multi-threaded using CUDA with Uniform Sampling,"
                 << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedCUDAUniformStats.avgValue << ","
                 << mcMultiThreadedCUDAUniformStats.avgTime << ","
@@ -353,7 +353,7 @@ int main() {
               << "  25th Percentile:  " << mcMultiThreadedCUDAStratifiedXStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiThreadedCUDAStratifiedXStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedCUDAStratifiedXStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using CUDA with Stratified Sampling by x-Coordinate,"
+        outFileTrials << precision << ",Monte Carlo Multi-threaded using CUDA with Stratified Sampling by x-Coordinate,"
                 << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedCUDAStratifiedXStats.avgValue << ","
                 << mcMultiThreadedCUDAStratifiedXStats.avgTime << ","
@@ -370,7 +370,7 @@ int main() {
               << "  25th Percentile:  " << mcMultiThreadedCUDAStratifiedGridStats.p25 << " s\n"
               << "  Median Time:      " << mcMultiThreadedCUDAStratifiedGridStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedCUDAStratifiedGridStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using CUDA with Grid-based Stratified Sampling,"
+        outFileTrials << precision << ",Monte Carlo Multi-threaded using CUDA with Grid-based Stratified Sampling,"
                 << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedCUDAStratifiedGridStats.avgValue << ","
                 << mcMultiThreadedCUDAStratifiedGridStats.avgTime << ","
