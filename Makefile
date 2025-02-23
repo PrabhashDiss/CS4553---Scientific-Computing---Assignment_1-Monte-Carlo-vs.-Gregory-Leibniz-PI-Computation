@@ -16,6 +16,9 @@ CU_SRC = main.cu
 CU_OBJ = $(CU_SRC:.cu=.o)
 CU_TARGET = simulation_cuda
 
+# Plotting script
+PLOT_SCRIPT = plot_results.py
+
 .PHONY: all clean
 
 all: $(CPP_TARGET)
