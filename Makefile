@@ -22,7 +22,7 @@ all: $(CPP_TARGET)
 	@echo "Running C++ simulation..."
 	./$(CPP_TARGET)
 	$(MAKE) clean
-	 $(CU_TARGET)
+	$(MAKE) $(CU_TARGET)
 	@echo "Running CUDA simulation..."
 	./$(CU_TARGET)
 	$(MAKE) clean
