@@ -53,7 +53,7 @@ print("Performance scores for precision saved to performance_scores_plot_precisi
 # ============================================================================
 
 # Read the CSV file containing the data
-data = pd.read_csv("results_trails.csv")
+data = pd.read_csv("results_trials.csv")
 
 # Convert the "Average PI Value" column to numeric
 data["Average PI Value"] = data["Average PI Value"].apply(pd.to_numeric, errors='coerce')
