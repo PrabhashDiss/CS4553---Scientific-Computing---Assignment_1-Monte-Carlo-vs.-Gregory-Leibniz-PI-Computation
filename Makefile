@@ -44,6 +44,9 @@ all: $(CPP_TARGET) $(CU_TARGET)
 	$(MAKE) clean
 	@echo "Generating plots..."
 	python $(PLOT_SCRIPT)
+	@echo "Running profiling..."
+	$(MAKE) profile
+	@echo "Simulation complete."
 
 # Profile build and run
 profile: $(PROF_CPP_TARGET) $(PROF_CU_TARGET)
