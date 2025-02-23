@@ -266,6 +266,7 @@ int main() {
               << "  Median Time:      " << mcMultiThreadedOMPUniformStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedOMPUniformStats.p75 << " s\n\n";
         outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using OpenMP with Uniform Sampling,"
+                << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedOMPUniformStats.avgValue << ","
                 << mcMultiThreadedOMPUniformStats.avgTime << ","
                 << mcMultiThreadedOMPUniformStats.p25 << ","
@@ -301,6 +302,7 @@ int main() {
               << "  Median Time:      " << mcMultiThreadedOMPStratifiedXStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p75 << " s\n\n";
         outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate,"
+                << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedOMPStratifiedXStats.avgValue << ","
                 << mcMultiThreadedOMPStratifiedXStats.avgTime << ","
                 << mcMultiThreadedOMPStratifiedXStats.p25 << ","
@@ -336,6 +338,7 @@ int main() {
               << "  Median Time:      " << mcMultiThreadedOMPStratifiedGridStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedGridStats.p75 << " s\n\n";
         outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using OpenMP with Grid-based Stratified Sampling,"
+                << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedOMPStratifiedGridStats.avgValue << ","
                 << mcMultiThreadedOMPStratifiedGridStats.avgTime << ","
                 << mcMultiThreadedOMPStratifiedGridStats.p25 << ","
@@ -368,6 +371,7 @@ int main() {
               << "  Median Time:      " << glMultiThreadedPthreadStats.median << " s\n"
               << "  75th Percentile:  " << glMultiThreadedPthreadStats.p75 << " s\n\n";
         outFilePrecisionsGL << precision << ",Gregory-Leibniz Multi-threaded using pthread,"
+                << std::fixed << std::setprecision(precision)
                 << glMultiThreadedPthreadStats.avgValue << ","
                 << glMultiThreadedPthreadStats.avgTime << ","
                 << glMultiThreadedPthreadStats.p25 << ","
@@ -384,6 +388,7 @@ int main() {
               << "  Median Time:      " << glMultiThreadedOMPStats.median << " s\n"
               << "  75th Percentile:  " << glMultiThreadedOMPStats.p75 << " s\n\n";
         outFilePrecisionsGL << precision << ",Gregory-Leibniz Multi-threaded using OpenMP,"
+                << std::fixed << std::setprecision(precision)
                 << glMultiThreadedOMPStats.avgValue << ","
                 << glMultiThreadedOMPStats.avgTime << ","
                 << glMultiThreadedOMPStats.p25 << ","
@@ -463,6 +468,7 @@ int main() {
               << "  Median Time:      " << mcMultiThreadedOMPUniformStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedOMPUniformStats.p75 << " s\n\n";
         outFileTrials << trials << ",Monte Carlo Multi-threaded using OpenMP with Uniform Sampling,"
+                << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedOMPUniformStats.avgValue << ","
                 << mcMultiThreadedOMPUniformStats.avgTime << ","
                 << mcMultiThreadedOMPUniformStats.p25 << ","
@@ -498,6 +504,7 @@ int main() {
               << "  Median Time:      " << mcMultiThreadedOMPStratifiedXStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p75 << " s\n\n";
         outFileTrials << trials << ",Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate,"
+                << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedOMPStratifiedXStats.avgValue << ","
                 << mcMultiThreadedOMPStratifiedXStats.avgTime << ","
                 << mcMultiThreadedOMPStratifiedXStats.p25 << ","
@@ -533,6 +540,7 @@ int main() {
               << "  Median Time:      " << mcMultiThreadedOMPStratifiedGridStats.median << " s\n"
               << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedGridStats.p75 << " s\n\n";
         outFileTrials << trials << ",Monte Carlo Multi-threaded using OpenMP with Grid-based Stratified Sampling,"
+                << std::fixed << std::setprecision(precision)
                 << mcMultiThreadedOMPStratifiedGridStats.avgValue << ","
                 << mcMultiThreadedOMPStratifiedGridStats.avgTime << ","
                 << mcMultiThreadedOMPStratifiedGridStats.p25 << ","
