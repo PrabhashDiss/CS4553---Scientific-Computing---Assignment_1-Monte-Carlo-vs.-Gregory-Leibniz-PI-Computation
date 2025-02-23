@@ -21,11 +21,9 @@ PLOT_SCRIPT = plot_results.py
 
 .PHONY: all clean
 
-all: $(CPP_TARGET)
+all: $(CPP_TARGET) $(CU_TARGET)
 	@echo "Running C++ simulation..."
 	./$(CPP_TARGET)
-	$(MAKE) clean
-	$(MAKE) $(CU_TARGET)
 	@echo "Running CUDA simulation..."
 	./$(CU_TARGET)
 	$(MAKE) clean
