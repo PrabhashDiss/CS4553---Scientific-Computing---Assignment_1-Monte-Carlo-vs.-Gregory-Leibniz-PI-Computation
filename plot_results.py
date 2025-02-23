@@ -8,17 +8,22 @@ import matplotlib.pyplot as plt
 # Read the CSV file containing the data
 data = pd.read_csv("results_precisions_mc.csv")
 
-# Convert the "Average PI Value" column to numeric
-data["Average PI Value"] = data["Average PI Value"].apply(pd.to_numeric, errors='coerce')
+# Convert columns to numeric
+data["Average PI Value"] = pd.to_numeric(data["Average PI Value"], errors='coerce')
+data["Average Time (s)"] = pd.to_numeric(data["Average Time (s)"], errors='coerce')
 
-# Compute the error
+# Compute the absolute error (difference from π)
 data["Error"] = abs(data["Average PI Value"] - 3.14159265358979323846)
 
-# Convert the "Average Time" column to numeric
-data["Average Time (s)"] = data["Average Time (s)"].apply(pd.to_numeric, errors='coerce')
+# Normalize error and time relative to the best (lowest) values
+min_error = data["Error"].min()
+data["Normalized Error"] = data["Error"] / min_error
+
+min_time = data["Average Time (s)"].min()
+data["Normalized Time"] = data["Average Time (s)"] / min_time
 
 # Compute a performance score
-data["Performance Score"] = 1 / (data["Error"] * data["Average Time (s)"])
+data["Performance Score"] = 1 / (data["Normalized Error"] * data["Normalized Time"])
 
 # Sort the data by performance score
 data = data.sort_values("Performance Score", ascending=False)
@@ -55,17 +60,22 @@ print("Performance scores for precision saved to performance_scores_plot_precisi
 # Read the CSV file containing the data
 data = pd.read_csv("results_trials.csv")
 
-# Convert the "Average PI Value" column to numeric
-data["Average PI Value"] = data["Average PI Value"].apply(pd.to_numeric, errors='coerce')
+# Convert columns to numeric
+data["Average PI Value"] = pd.to_numeric(data["Average PI Value"], errors='coerce')
+data["Average Time (s)"] = pd.to_numeric(data["Average Time (s)"], errors='coerce')
 
-# Compute the error
+# Compute the absolute error (difference from π)
 data["Error"] = abs(data["Average PI Value"] - 3.14159265358979323846)
 
-# Convert the "Average Time" column to numeric
-data["Average Time (s)"] = data["Average Time (s)"].apply(pd.to_numeric, errors='coerce')
+# Normalize error and time relative to the best (lowest) values
+min_error = data["Error"].min()
+data["Normalized Error"] = data["Error"] / min_error
+
+min_time = data["Average Time (s)"].min()
+data["Normalized Time"] = data["Average Time (s)"] / min_time
 
 # Compute a performance score
-data["Performance Score"] = 1 / (data["Error"] * data["Average Time (s)"])
+data["Performance Score"] = 1 / (data["Normalized Error"] * data["Normalized Time"])
 
 # Sort the data by performance score
 data = data.sort_values("Performance Score", ascending=False)
