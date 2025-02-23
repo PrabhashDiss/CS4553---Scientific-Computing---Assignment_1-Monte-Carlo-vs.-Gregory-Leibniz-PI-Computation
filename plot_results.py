@@ -1,6 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# ============================================================================
+# PLOT PERFORMANCE SCORES FOR PRECISION
+# ============================================================================
+
 # Read the CSV file containing the data
 data = pd.read_csv("results_precisions_mc.csv")
 
@@ -44,6 +48,9 @@ plt.show()
 
 print("Performance scores for precision saved to performance_scores_plot_precisions.png")
 
+# ============================================================================
+# PLOT PERFORMANCE SCORES FOR TRIALS
+# ============================================================================
 
 # Read the CSV file containing the data
 data = pd.read_csv("results_trails.csv")
