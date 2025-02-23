@@ -14,7 +14,7 @@ data["Accuracy"] = abs(data["Average PI Value"] - 3.14159265358979323846)
 data["Average Time (s)"] = data["Average Time (s)"].apply(pd.to_numeric, errors='coerce')
 
 # Compute a performance score
-data["Performance Score"] = data["Accuracy"] / data["Average Time (s)"]
+data["Performance Score"] = 1 / (data["Accuracy"] * data["Average Time (s)"])
 
 # Sort the data by performance score
 data = data.sort_values("Performance Score", ascending=False)
