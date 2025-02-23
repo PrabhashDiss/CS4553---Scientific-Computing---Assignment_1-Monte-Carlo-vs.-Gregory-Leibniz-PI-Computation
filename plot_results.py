@@ -11,14 +11,14 @@ data = pd.read_csv("results_precisions_mc.csv")
 # Convert the "Average PI Value" column to numeric
 data["Average PI Value"] = data["Average PI Value"].apply(pd.to_numeric, errors='coerce')
 
-# Compute the accuracy
-data["Accuracy"] = abs(data["Average PI Value"] - 3.14159265358979323846)
+# Compute the error
+data["Error"] = abs(data["Average PI Value"] - 3.14159265358979323846)
 
 # Convert the "Average Time" column to numeric
 data["Average Time (s)"] = data["Average Time (s)"].apply(pd.to_numeric, errors='coerce')
 
 # Compute a performance score
-data["Performance Score"] = 1 / (data["Accuracy"] * data["Average Time (s)"])
+data["Performance Score"] = 1 / (data["Error"] * data["Average Time (s)"])
 
 # Sort the data by performance score
 data = data.sort_values("Performance Score", ascending=False)
@@ -37,8 +37,8 @@ print(data)
 plt.figure(figsize=(14, 8))
 plt.barh(data["Label"], data["Performance Score"], color="steelblue")
 plt.xlabel("Simulation Type")
-plt.ylabel("Performance Score (Accuracy / Time)")
-plt.title("Performance Scores Based on Accuracy and Time")
+plt.ylabel("Performance Score (Error / Time)")
+plt.title("Performance Scores Based on Error and Time")
 plt.tight_layout()
 plt.show()
 
@@ -58,14 +58,14 @@ data = pd.read_csv("results_trials.csv")
 # Convert the "Average PI Value" column to numeric
 data["Average PI Value"] = data["Average PI Value"].apply(pd.to_numeric, errors='coerce')
 
-# Compute the accuracy
-data["Accuracy"] = abs(data["Average PI Value"] - 3.14159265358979323846)
+# Compute the error
+data["Error"] = abs(data["Average PI Value"] - 3.14159265358979323846)
 
 # Convert the "Average Time" column to numeric
 data["Average Time (s)"] = data["Average Time (s)"].apply(pd.to_numeric, errors='coerce')
 
 # Compute a performance score
-data["Performance Score"] = 1 / (data["Accuracy"] * data["Average Time (s)"])
+data["Performance Score"] = 1 / (data["Error"] * data["Average Time (s)"])
 
 # Sort the data by performance score
 data = data.sort_values("Performance Score", ascending=False)
@@ -84,8 +84,8 @@ print(data)
 plt.figure(figsize=(14, 8))
 plt.barh(data["Label"], data["Performance Score"], color="steelblue")
 plt.xlabel("Simulation Type")
-plt.ylabel("Performance Score (Accuracy / Time)")
-plt.title("Performance Scores Based on Accuracy and Time")
+plt.ylabel("Performance Score (Error / Time)")
+plt.title("Performance Scores Based on Error and Time")
 plt.tight_layout()
 plt.show()
 
