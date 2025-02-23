@@ -26,6 +26,8 @@ all: $(CPP_TARGET)
 	@echo "Running CUDA simulation..."
 	./$(CU_TARGET)
 	$(MAKE) clean
+	@echo "Generating plots..."
+	python $(PLOT_SCRIPT)
 
 # Link the C++ executable
 $(CPP_TARGET): $(CPP_OBJ)
