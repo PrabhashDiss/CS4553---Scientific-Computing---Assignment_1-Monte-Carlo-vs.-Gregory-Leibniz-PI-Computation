@@ -19,6 +19,9 @@ data["Performance Score"] = 1 / (data["Accuracy"] * data["Average Time (s)"])
 # Sort the data by performance score
 data = data.sort_values("Performance Score", ascending=False)
 
+# Reset the index
+data.reset_index(drop=True, inplace=True)
+
 # Create a new column for the label
 data["Label"] = data.apply(
     lambda row: f"{row['Simulation Type']} for {row['Precision']} decimal places", axis=1)
