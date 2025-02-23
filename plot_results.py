@@ -39,7 +39,7 @@ plt.tight_layout()
 plt.show()
 
 # Save and show the plot
-plt.savefig("performance_scores_plot.png")
+plt.savefig("performance_scores_plot_precisions.png")
 plt.show()
 
-print("Performance scores saved to performance_scores.png")
+print("Performance scores for precision saved to performance_scores_plot_precisions.png")
