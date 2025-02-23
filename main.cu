@@ -297,5 +297,81 @@ int main() {
 
     outFilePrecisionsMC.close();
 
+    // Append results to file
+    std::ofstream outFileTrials("results_trials.csv", std::ios_base::app);
+    if (!outFileTrials) {
+        std::cerr << "Error opening file for appending.\n";
+        return 1;
+    }
+
+    // Define the fixed trial counts.
+    std::vector<unsigned long long> trialCounts = { (1ULL << 24), (1ULL << 26), (1ULL << 28) };
+
+    int precision = 16;
+
+    for (unsigned long long trials : trialCounts) {
+        std::cout << GREEN << "Trials: " << trials << "\n\n";
+
+        const int iterationsCount = 5;
+
+        // Set output precision for simulation results
+        std::cout << RESET << std::fixed << std::setprecision(precision);
+
+        // ---------------------------------------------------
+        // Monte Carlo: Multi-threaded using CUDA with uniform sampling
+        Stats mcMultiThreadedCUDAUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_cuda_with_uniform, trials);
+        std::cout << "Monte Carlo Multi-threaded using CUDA with Uniform Sampling:\n"
+              << "  Average PI Value: " << mcMultiThreadedCUDAUniformStats.avgValue << "\n"
+              << "  Average Time:     " << mcMultiThreadedCUDAUniformStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcMultiThreadedCUDAUniformStats.p25 << " s\n"
+              << "  Median Time:      " << mcMultiThreadedCUDAUniformStats.median << " s\n"
+              << "  75th Percentile:  " << mcMultiThreadedCUDAUniformStats.p75 << " s\n\n";
+        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using CUDA with Uniform Sampling,"
+                << std::fixed << std::setprecision(precision)
+                << mcMultiThreadedCUDAUniformStats.avgValue << ","
+                << mcMultiThreadedCUDAUniformStats.avgTime << ","
+                << mcMultiThreadedCUDAUniformStats.p25 << ","
+                << mcMultiThreadedCUDAUniformStats.median << ","
+                << mcMultiThreadedCUDAUniformStats.p75 << "\n";
+
+        // ---------------------------------------------------
+        // Monte Carlo: Multi-threaded using CUDA with stratified sampling by x–coordinate
+        Stats mcMultiThreadedCUDAStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_cuda_with_stratified_x, trials, num_threads);
+        std::cout << "Monte Carlo Multi-threaded using CUDA with Stratified Sampling by x-Coordinate:\n"
+              << "  Average PI Value: " << mcMultiThreadedCUDAStratifiedXStats.avgValue << "\n"
+              << "  Average Time:     " << mcMultiThreadedCUDAStratifiedXStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcMultiThreadedCUDAStratifiedXStats.p25 << " s\n"
+              << "  Median Time:      " << mcMultiThreadedCUDAStratifiedXStats.median << " s\n"
+              << "  75th Percentile:  " << mcMultiThreadedCUDAStratifiedXStats.p75 << " s\n\n";
+        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using CUDA with Stratified Sampling by x-Coordinate,"
+                << std::fixed << std::setprecision(precision)
+                << mcMultiThreadedCUDAStratifiedXStats.avgValue << ","
+                << mcMultiThreadedCUDAStratifiedXStats.avgTime << ","
+                << mcMultiThreadedCUDAStratifiedXStats.p25 << ","
+                << mcMultiThreadedCUDAStratifiedXStats.median << ","
+                << mcMultiThreadedCUDAStratifiedXStats.p75 << "\n";
+
+        // ---------------------------------------------------
+        // Monte Carlo: Multi-threaded using CUDA with grid–based stratified sampling
+        Stats mcMultiThreadedCUDAStratifiedGridStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_cuda_with_stratified_grid, trials, sqrt(num_threads));
+        std::cout << "Monte Carlo Multi-threaded using CUDA with Grid-based Stratified Sampling:\n"
+              << "  Average PI Value: " << mcMultiThreadedCUDAStratifiedGridStats.avgValue << "\n"
+              << "  Average Time:     " << mcMultiThreadedCUDAStratifiedGridStats.avgTime << " s\n"
+              << "  25th Percentile:  " << mcMultiThreadedCUDAStratifiedGridStats.p25 << " s\n"
+              << "  Median Time:      " << mcMultiThreadedCUDAStratifiedGridStats.median << " s\n"
+              << "  75th Percentile:  " << mcMultiThreadedCUDAStratifiedGridStats.p75 << " s\n\n";
+        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using CUDA with Grid-based Stratified Sampling,"
+                << std::fixed << std::setprecision(precision)
+                << mcMultiThreadedCUDAStratifiedGridStats.avgValue << ","
+                << mcMultiThreadedCUDAStratifiedGridStats.avgTime << ","
+                << mcMultiThreadedCUDAStratifiedGridStats.p25 << ","
+                << mcMultiThreadedCUDAStratifiedGridStats.median << ","
+                << mcMultiThreadedCUDAStratifiedGridStats.p75 << "\n";
+
+        std::cout << "------------------------------------------------------\n\n";
+    }
+
+    outFileTrials.close();
+
     return 0;
 }
