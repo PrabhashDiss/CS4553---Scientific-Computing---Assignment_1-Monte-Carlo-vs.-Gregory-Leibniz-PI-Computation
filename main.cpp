@@ -95,11 +95,31 @@ std::string computeRequiredIterationsStrGL(int precision) {
 // Utility: Compute Actual Trials/Iterations
 // ======================================================================
 unsigned long long computeRequiredTrialsMC(int precision) {
-    return static_cast<unsigned long long>(3 * std::pow(10, precision - 2)); // static_cast<unsigned long long>(3 * std::pow(10, 2 * precision));
+    if (precision == 5) {
+        return static_cast<unsigned long long>(3 * std::pow(10, 2));
+    } else if (precision == 10) {
+        return static_cast<unsigned long long>(3 * std::pow(10, 4));
+    } else if (precision == 15) {
+        return static_cast<unsigned long long>(3 * std::pow(10, 6));
+    } else if (precision == 20) {
+        return static_cast<unsigned long long>(3 * std::pow(10, 8));
+    } else {
+        return static_cast<unsigned long long>(3 * std::pow(10, precision - 2)); // static_cast<unsigned long long>(3 * std::pow(10, 2 * precision));
+    }
 }
 
 unsigned long long computeRequiredIterationsGL(int precision) {
-    return static_cast<unsigned long long>(1.5 * std::pow(10, precision - 1));  // static_cast<unsigned long long>(1.5 * std::pow(10, precision));
+    if (precision == 5) {
+        return static_cast<unsigned long long>(1.5 * std::pow(10, 2));
+    } else if (precision == 10) {
+        return static_cast<unsigned long long>(1.5 * std::pow(10, 4));
+    } else if (precision == 15) {
+        return static_cast<unsigned long long>(1.5 * std::pow(10, 6));
+    } else if (precision == 20) {
+        return static_cast<unsigned long long>(1.5 * std::pow(10, 8));
+    } else {
+        return static_cast<unsigned long long>(1.5 * std::pow(10, precision - 1));  // static_cast<unsigned long long>(1.5 * std::pow(10, precision));
+    }
 }
 
 // ======================================================================
