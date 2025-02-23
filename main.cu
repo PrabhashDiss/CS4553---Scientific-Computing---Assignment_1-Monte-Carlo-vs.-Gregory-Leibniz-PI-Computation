@@ -58,7 +58,6 @@ std::string computeRequiredTrialsStrMC(int precision) {
 // Utility: Compute Actual Trials
 // ======================================================================
 unsigned long long computeRequiredTrialsMC(int precision) {
-    unsigned long long computeRequiredTrialsMC(int precision) {
     if (precision == 5) {
         return static_cast<unsigned long long>(3 * std::pow(10, 2));
     } else if (precision == 10) {
