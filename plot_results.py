@@ -23,6 +23,9 @@ data = data.sort_values("Performance Score", ascending=False)
 data["Label"] = data.apply(
     lambda row: f"{row['Simulation Type']} for {row['Precision']} decimal places", axis=1)
 
+print("All performance scores:")
+print(data)
+
 # Create a bar chart for the performance scores
 plt.figure(figsize=(14, 8))
 plt.barh(data["Label"], data["Performance Score"], color="steelblue")
