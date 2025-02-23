@@ -7,12 +7,12 @@ NVCC = nvcc
 NVCCFLAGS = -O2 -arch=sm_89
 
 # C++ sources and target (uses main.cpp)
-CPP_SRC = main.cpp monte_carlo.cpp gregory_leibniz.cpp
+CPP_SRC = main_cpp.cpp monte_carlo.cpp gregory_leibniz.cpp
 CPP_OBJ = $(CPP_SRC:.cpp=.o)
 CPP_TARGET = simulation_cpp
 
 # CUDA source and target (uses main.cu)
-CU_SRC = main.cu
+CU_SRC = main_cuda.cu
 CU_OBJ = $(CU_SRC:.cu=.o)
 CU_TARGET = simulation_cuda
 
