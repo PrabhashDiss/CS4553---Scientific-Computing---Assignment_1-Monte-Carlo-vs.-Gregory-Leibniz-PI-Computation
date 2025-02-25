@@ -1,0 +1,317 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 38.47      0.10     0.10                             double std::generate_canonical<double, 53ul, std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul> >(std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul>&)
+ 30.77      0.18     0.08                             count_circle_hits(unsigned long long, double, double, double, double, unsigned long long)
+ 30.77      0.26     0.08                             std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul>::operator()()
+  0.00      0.26     0.00    11633     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::char_is_nonzero_predicate(char const&)
+  0.00      0.26     0.00     1446     0.00     0.00  void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+  0.00      0.26     0.00     1244     0.00     0.00  boost::detail::lcast_ret_unsigned<std::char_traits<char>, unsigned int, char>::convert()
+  0.00      0.26     0.00      209     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > std::__find_if<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)> >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)>, std::random_access_iterator_tag)
+  0.00      0.26     0.00      193     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*)
+  0.00      0.26     0.00      151     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&)
+  0.00      0.26     0.00       94     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long)
+  0.00      0.26     0.00       42     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator+=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&)
+  0.00      0.26     0.00       24     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long)
+  0.00      0.26     0.00       24     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator-=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&)
+  0.00      0.26     0.00       11     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double)
+  0.00      0.26     0.00        9     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float(double, int)
+  0.00      0.26     0.00        9     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::isone() const
+  0.00      0.26     0.00        8     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv()
+  0.00      0.26     0.00        6     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator/=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&)
+  0.00      0.26     0.00        4     0.00     0.00  void std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> > >::_M_realloc_insert<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&>(__gnu_cxx::__normal_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>*, std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> > > >, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&)
+  0.00      0.26     0.00        4     0.00     0.00  void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&)
+  0.00      0.26     0.00        2     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float<long long>(long long, boost::enable_if<boost::is_signed<long long>, void>::type*)
+  0.00      0.26     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+  0.00      0.26     0.00        1     0.00     0.00  void boost::multiprecision::detail::format_float_string<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, long, long, std::_Ios_Fmtflags, bool)
+  0.00      0.26     0.00        1     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer()
+  0.00      0.26     0.00        1     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::data_elem_is_non_zero_predicate(unsigned int const&)
+  0.00      0.26     0.00        1     0.00     0.00  boost::multiprecision::backends::cpp_dec_float<50u, int, void>::str[abi:cxx11](long, std::_Ios_Fmtflags) const
+  0.00      0.26     0.00        1     0.00     0.00  void std::__insertion_sort<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__ops::_Iter_less_iter>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__ops::_Iter_less_iter)
+  0.00      0.26     0.00        1     0.00     0.00  void std::__introsort_loop<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, long, __gnu_cxx::__ops::_Iter_less_iter>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, long, __gnu_cxx::__ops::_Iter_less_iter)
+  0.00      0.26     0.00        1     0.00     0.00  unsigned int const* std::__find_if<unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)> >(unsigned int const*, unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)>, std::random_access_iterator_tag)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 3.85% of 0.26 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     38.5    0.10    0.00                 double std::generate_canonical<double, 53ul, std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul> >(std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul>&) [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]     30.8    0.08    0.00                 count_circle_hits(unsigned long long, double, double, double, double, unsigned long long) [2]
+                0.00    0.00      80/1446        void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [12]
+-----------------------------------------------
+                                                 <spontaneous>
+[3]     30.8    0.08    0.00                 std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul>::operator()() [3]
+-----------------------------------------------
+                0.00    0.00     258/11633       __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > std::__find_if<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)> >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)>, std::random_access_iterator_tag) [14]
+                0.00    0.00   11375/11633       boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+[11]     0.0    0.00    0.00   11633         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::char_is_nonzero_predicate(char const&) [11]
+-----------------------------------------------
+                0.00    0.00      80/1446        count_circle_hits(unsigned long long, double, double, double, double, unsigned long long) [2]
+                0.00    0.00    1366/1446        boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+[12]     0.0    0.00    0.00    1446         void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [12]
+-----------------------------------------------
+                0.00    0.00    1244/1244        boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+[13]     0.0    0.00    0.00    1244         boost::detail::lcast_ret_unsigned<std::char_traits<char>, unsigned int, char>::convert() [13]
+-----------------------------------------------
+                0.00    0.00     209/209         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+[14]     0.0    0.00    0.00     209         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > std::__find_if<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)> >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)>, std::random_access_iterator_tag) [14]
+                0.00    0.00     258/11633       boost::multiprecision::backends::cpp_dec_float<50u, int, void>::char_is_nonzero_predicate(char const&) [11]
+-----------------------------------------------
+                0.00    0.00       2/193         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+                0.00    0.00     191/193         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+[15]     0.0    0.00    0.00     193         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+                0.00    0.00   11375/11633       boost::multiprecision::backends::cpp_dec_float<50u, int, void>::char_is_nonzero_predicate(char const&) [11]
+                0.00    0.00    1366/1446        void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [12]
+                0.00    0.00    1244/1244        boost::detail::lcast_ret_unsigned<std::char_traits<char>, unsigned int, char>::convert() [13]
+                0.00    0.00     209/209         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > std::__find_if<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)> >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)>, std::random_access_iterator_tag) [14]
+                0.00    0.00       1/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::isone() const [23]
+-----------------------------------------------
+                0.00    0.00       5/151         monte_carlo_pi_multithreaded_using_pthread_with_stratified_x(unsigned long long, int) [45]
+                0.00    0.00       6/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator/=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [25]
+                0.00    0.00      23/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [21]
+                0.00    0.00      48/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+                0.00    0.00      69/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+[16]     0.0    0.00    0.00     151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [16]
+-----------------------------------------------
+                0.00    0.00       1/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float<long long>(long long, boost::enable_if<boost::is_signed<long long>, void>::type*) [28]
+                0.00    0.00       1/94          Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+                0.00    0.00       5/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+                0.00    0.00      10/94          monte_carlo_pi_multithreaded_using_pthread_with_stratified_x(unsigned long long, int) [45]
+                0.00    0.00      13/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [21]
+                0.00    0.00      64/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+[17]     0.0    0.00    0.00      94         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long) [17]
+-----------------------------------------------
+                0.00    0.00       5/42          Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+                0.00    0.00      13/42          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [21]
+                0.00    0.00      24/42          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator-=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [20]
+[18]     0.0    0.00    0.00      42         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator+=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [18]
+-----------------------------------------------
+                                   2             boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+                0.00    0.00       1/24          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+                0.00    0.00      23/24          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [21]
+[19]     0.0    0.00    0.00      24+2       boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+                0.00    0.00     191/193         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+                0.00    0.00      69/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [16]
+                0.00    0.00      64/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long) [17]
+                0.00    0.00       2/8           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+                                   2             boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+-----------------------------------------------
+                0.00    0.00      24/24          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+[20]     0.0    0.00    0.00      24         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator-=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [20]
+                0.00    0.00      24/42          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator+=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [18]
+-----------------------------------------------
+                0.00    0.00       1/11          Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+                0.00    0.00       5/11          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+                0.00    0.00       5/11          monte_carlo_pi_multithreaded_using_pthread_with_stratified_x(unsigned long long, int) [45]
+[21]     0.0    0.00    0.00      11         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [21]
+                0.00    0.00      23/24          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+                0.00    0.00      23/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [16]
+                0.00    0.00      13/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long) [17]
+                0.00    0.00      13/42          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator+=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [18]
+-----------------------------------------------
+                0.00    0.00       1/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+                0.00    0.00       8/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+[22]     0.0    0.00    0.00       9         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float(double, int) [22]
+-----------------------------------------------
+                0.00    0.00       1/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+                0.00    0.00       8/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+[23]     0.0    0.00    0.00       9         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::isone() const [23]
+                0.00    0.00       1/1           unsigned int const* std::__find_if<unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)> >(unsigned int const*, unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)>, std::random_access_iterator_tag) [36]
+-----------------------------------------------
+                0.00    0.00       2/8           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+                0.00    0.00       6/8           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator/=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [25]
+[24]     0.0    0.00    0.00       8         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+                0.00    0.00      48/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [16]
+                0.00    0.00      24/24          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator-=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [20]
+                0.00    0.00       8/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::isone() const [23]
+                0.00    0.00       8/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float(double, int) [22]
+-----------------------------------------------
+                0.00    0.00       1/6           Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+                0.00    0.00       5/6           monte_carlo_pi_multithreaded_using_pthread_with_stratified_x(unsigned long long, int) [45]
+[25]     0.0    0.00    0.00       6         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator/=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [25]
+                0.00    0.00       6/8           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [24]
+                0.00    0.00       6/151         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [16]
+-----------------------------------------------
+                0.00    0.00       4/4           Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+[26]     0.0    0.00    0.00       4         void std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> > >::_M_realloc_insert<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&>(__gnu_cxx::__normal_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>*, std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> > > >, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&) [26]
+-----------------------------------------------
+                0.00    0.00       4/4           Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+[27]     0.0    0.00    0.00       4         void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) [27]
+-----------------------------------------------
+                0.00    0.00       2/2           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+[28]     0.0    0.00    0.00       2         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float<long long>(long long, boost::enable_if<boost::is_signed<long long>, void>::type*) [28]
+                0.00    0.00       1/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long) [17]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [84]
+[29]     0.0    0.00    0.00       1         _GLOBAL__sub_I_main [29]
+-----------------------------------------------
+                0.00    0.00       1/1           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::str[abi:cxx11](long, std::_Ios_Fmtflags) const [33]
+[30]     0.0    0.00    0.00       1         void boost::multiprecision::detail::format_float_string<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, long, long, std::_Ios_Fmtflags, bool) [30]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [84]
+[31]     0.0    0.00    0.00       1         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [31]
+                0.00    0.00       5/94          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long) [17]
+                0.00    0.00       5/11          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [21]
+                0.00    0.00       2/193         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [15]
+                0.00    0.00       2/2           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float<long long>(long long, boost::enable_if<boost::is_signed<long long>, void>::type*) [28]
+                0.00    0.00       1/24          boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [19]
+                0.00    0.00       1/9           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float(double, int) [22]
+-----------------------------------------------
+                0.00    0.00       1/1           unsigned int const* std::__find_if<unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)> >(unsigned int const*, unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)>, std::random_access_iterator_tag) [36]
+[32]     0.0    0.00    0.00       1         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::data_elem_is_non_zero_predicate(unsigned int const&) [32]
+-----------------------------------------------
+                0.00    0.00       1/1           std::ostream& boost::multiprecision::operator<< <boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>(std::ostream&, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&) [53]
+[33]     0.0    0.00    0.00       1         boost::multiprecision::backends::cpp_dec_float<50u, int, void>::str[abi:cxx11](long, std::_Ios_Fmtflags) const [33]
+                0.00    0.00       1/1           void boost::multiprecision::detail::format_float_string<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, long, long, std::_Ios_Fmtflags, bool) [30]
+-----------------------------------------------
+                0.00    0.00       1/1           Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+[34]     0.0    0.00    0.00       1         void std::__insertion_sort<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__ops::_Iter_less_iter>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__ops::_Iter_less_iter) [34]
+-----------------------------------------------
+                0.00    0.00       1/1           Stats measureSimulation<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&>(int, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> (*)(unsigned long long, int), unsigned long long&, unsigned int&) [38]
+[35]     0.0    0.00    0.00       1         void std::__introsort_loop<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, long, __gnu_cxx::__ops::_Iter_less_iter>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, long, __gnu_cxx::__ops::_Iter_less_iter) [35]
+-----------------------------------------------
+                0.00    0.00       1/1           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::isone() const [23]
+[36]     0.0    0.00    0.00       1         unsigned int const* std::__find_if<unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)> >(unsigned int const*, unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)>, std::random_access_iterator_tag) [36]
+                0.00    0.00       1/1           boost::multiprecision::backends::cpp_dec_float<50u, int, void>::data_elem_is_non_zero_predicate(unsigned int const&) [32]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [29] _GLOBAL__sub_I_main    [28] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float<long long>(long long, boost::enable_if<boost::is_signed<long long>, void>::type*) [3] std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul>::operator()()
+   [2] count_circle_hits(unsigned long long, double, double, double, double, unsigned long long) [22] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::cpp_dec_float(double, int) [26] void std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> > >::_M_realloc_insert<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&>(__gnu_cxx::__normal_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>*, std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1>, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> > > >, boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50u, int, void>, (boost::multiprecision::expression_template_option)1> const&)
+  [30] void boost::multiprecision::detail::format_float_string<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, long, long, std::_Ios_Fmtflags, bool) [21] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator=(long double) [27] void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&)
+  [31] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::initializer::initializer() [25] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator/=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [12] void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+  [24] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::calculate_inv() [20] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator-=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [34] void std::__insertion_sort<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__ops::_Iter_less_iter>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__ops::_Iter_less_iter)
+  [17] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::from_unsigned_long_long(unsigned long long) [16] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator*=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [35] void std::__introsort_loop<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, long, __gnu_cxx::__ops::_Iter_less_iter>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, long, __gnu_cxx::__ops::_Iter_less_iter)
+  [11] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::char_is_nonzero_predicate(char const&) [18] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::operator+=(boost::multiprecision::backends::cpp_dec_float<50u, int, void> const&) [1] double std::generate_canonical<double, 53ul, std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul> >(std::mersenne_twister_engine<unsigned long, 64ul, 312ul, 156ul, 31ul, 13043109905998158313ul, 29ul, 6148914691236517205ul, 17ul, 8202884508482404352ul, 37ul, 18444473444759240704ul, 43ul, 6364136223846793005ul>&)
+  [32] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::data_elem_is_non_zero_predicate(unsigned int const&) [13] boost::detail::lcast_ret_unsigned<std::char_traits<char>, unsigned int, char>::convert() [14] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > std::__find_if<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)> >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__ops::_Iter_pred<bool (*)(char const&)>, std::random_access_iterator_tag)
+  [19] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::pow2(long long) [33] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::str[abi:cxx11](long, std::_Ios_Fmtflags) const [36] unsigned int const* std::__find_if<unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)> >(unsigned int const*, unsigned int const*, __gnu_cxx::__ops::_Iter_pred<bool (*)(unsigned int const&)>, std::random_access_iterator_tag)
+  [15] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::rd_string(char const*) [23] boost::multiprecision::backends::cpp_dec_float<50u, int, void>::isone() const
