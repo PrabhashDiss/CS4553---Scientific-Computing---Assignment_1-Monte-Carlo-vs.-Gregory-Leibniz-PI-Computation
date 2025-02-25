@@ -147,7 +147,7 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
     return stats;
 }
 
-void report_results(const std::string& filename, auto identifier, auto precision, const Stats& stats) {
+void report_results(const std::string& filename, auto identifier, auto precision, auto trials, const Stats& stats) {
     std::cout << identifier << ":\n"
               << std::fixed << std::setprecision(precision)
               << "  Average PI Value: " << stats.avgValue << "\n"
@@ -158,6 +158,7 @@ void report_results(const std::string& filename, auto identifier, auto precision
               << "  75th Percentile: " << stats.p75 << "\n\n";
     std::ofstream file(filename, std::ios_base::app);
     file << std::fixed << std::setprecision(precision)
+         << precision << "," << trials << ","
          << identifier << "," << stats.avgValue << ","
          << formatAbsoluteError(stats.absoluteError, precision) << ","
          << stats.avgTime << "," << stats.p25 << ","
@@ -256,7 +257,7 @@ void run_precision_study() {
         auto run = [&](auto sampler, const std::string& name) {
             auto stats = measureSimulation(runs, [=]{ return cuda_monte_carlo(trials, sampler); });
             report_results("results_precisions_mc.csv", 
-                std::to_string(precision)+","+name, precision, stats);
+                std::to_string(precision)+","+name, precision, trials, stats);
         };
 
         run(uniform_sampler, "CUDA Uniform");
@@ -275,7 +276,7 @@ void run_scaling_study() {
         auto run = [&](auto sampler, const std::string& name) {
             auto stats = measureSimulation(runs, [=]{ return cuda_monte_carlo(t, sampler); });
             report_results("results_trials.csv", 
-                std::to_string(t)+","+name, precision, stats);
+                name, precision, t, stats);
         };
 
         run(uniform_sampler, "CUDA Uniform");
