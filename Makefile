@@ -56,7 +56,7 @@ profile: $(PROF_CPP_TARGET) $(PROF_CU_TARGET)
 	@echo "Running CUDA profile simulation (ncu)..."
 	./$(PROF_CU_TARGET)
 	@echo "Generating CUDA prof report..."
-	ncu ./$(PROF_CU_TARGET) > prof_report_cuda.txt
+	ncu --set full --metrics all --nvtx -o profile --target-processes all -f ./$(PROF_CU_TARGET) > prof_report_cuda.txt
 	@echo "CUDA profile report saved to prof_report_cuda.txt"
 	$(MAKE) clean
 	@echo "Profiling complete."
