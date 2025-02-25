@@ -210,7 +210,7 @@ void runSimulation(const std::string& name, int iterations, std::ofstream& outFi
               << "  Median Time:      " << stats.median << " s\n"
               << "  75th Percentile:  " << stats.p75 << " s\n\n";
 
-    outFile << precision << "," << name << ","
+    outFile << precision << "," << std::get<0>(std::forward_as_tuple(args...)) << "," << name << ","
             << std::fixed << std::setprecision(precision) << stats.avgValue << "," << formatAbsoluteError(stats.absoluteError, precision) << ","
             << stats.avgTime << "," << stats.p25 << "," << stats.median << "," << stats.p75 << "\n";
 }
@@ -264,9 +264,9 @@ int main() {
     std::ofstream glPrecisions("results_precisions_gl.csv");
     std::ofstream mcTrials("results_trials.csv");
     
-    mcPrecisions << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
-    glPrecisions << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
-    mcTrials << "Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    mcPrecisions << "Precision,Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    glPrecisions << "Precision,Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    mcTrials << "Precision,Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
 
     const unsigned threads = 16;
 
