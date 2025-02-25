@@ -224,7 +224,7 @@ void run_precision_study() {
                   << req_trials_str << "\n";
 
         unsigned long long trials = computeRequiredTrialsMC(precision);
-        std::cout << "Using " << trials << " trials.\n\n";
+        std::cout << "Using " << trials << " trials.\n\n" << RESET;
 
         auto run = [&](auto sampler, const std::string& name) {
             auto stats = measureSimulation(runs, [=]{ return cuda_monte_carlo(trials, sampler); });
@@ -243,7 +243,7 @@ void run_scaling_study() {
     const int precision = 16, runs = 5;
     
     for(auto t : trials) {
-        std::cout << GREEN << "Trials: " << t << RESET << "\n\n";
+        std::cout << GREEN << "Trials: " << t << "\n\n" << RESET;
 
         auto run = [&](auto sampler, const std::string& name) {
             auto stats = measureSimulation(runs, [=]{ return cuda_monte_carlo(t, sampler); });
