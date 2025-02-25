@@ -268,7 +268,7 @@ int main() {
 
     // Trial-based simulations
     for (auto trials : trialCounts) {
-        std::cout << GREEN << "\nTrials: " << trials << "\n" << RESET;
+        std::cout << GREEN << "Trials: " << trials << "\n\n" << RESET;
     
         runMonteCarloSimulations(trialPrecision, trials, threads, mcTrials);
     }
