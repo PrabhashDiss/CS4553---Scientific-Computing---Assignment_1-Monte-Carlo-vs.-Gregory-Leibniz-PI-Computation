@@ -33,6 +33,13 @@ PROF_CU_TARGET = prof_cuda
 # Plotting script
 PLOT_SCRIPT = plot_results.py
 
+# Directories for final output files
+RESULTS_DIR = results
+
+# Create directories if they don't exist
+$(RESULTS_DIR):
+	mkdir -p $(RESULTS_DIR)
+
 .PHONY: all clean
 
 # Regular build and run
@@ -44,6 +51,8 @@ all: $(CPP_TARGET) $(CU_TARGET)
 	$(MAKE) clean
 	@echo "Generating plots..."
 	python $(PLOT_SCRIPT)
+	mkdir -p $(RESULTS_DIR)
+	mv *.csv *.png $(RESULTS_DIR) 2>/dev/null || true
 	@echo "Simulation complete."
 
 # Profile build and run
@@ -58,6 +67,8 @@ profile: $(PROF_CPP_TARGET) $(PROF_CU_TARGET)
 	@echo "Generating CUDA prof report..."
 	ncu --set full --metrics all --nvtx -o profile --target-processes all -f ./$(PROF_CU_TARGET) > prof_report_cuda.txt
 	@echo "CUDA profile report saved to prof_report_cuda.txt"
+	mkdir -p $(RESULTS_DIR)
+	mv prof_report_cpp.txt prof_report_cuda.txt profile.ncu-rep $(RESULTS_DIR) 2>/dev/null || true
 	$(MAKE) clean
 	@echo "Profiling complete."
 
