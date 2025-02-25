@@ -124,5 +124,7 @@ int main() {
             << "  Median Time:      " << mcMultiThreadedCUDAUniformStats.median << " s\n"
             << "  75th Percentile:  " << mcMultiThreadedCUDAUniformStats.p75 << " s\n\n";
 
+    std::cout << "------------------------------------------------------\n\n";
+
     return 0;
 }
