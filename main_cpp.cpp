@@ -170,388 +170,128 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
     return stats;
 }
 
+template<typename Func, typename... Args>
+void runSimulation(const std::string& name, int iterations, std::ofstream& outFile, 
+                  int precision, Func&& func, Args&&... args) {
+    const int runs = 5;
+    Stats stats = measureSimulation(runs, std::forward<Func>(func), std::forward<Args>(args)...);
+
+    std::cout << name << ":\n"
+              << std::fixed << std::setprecision(precision)
+              << "  Average PI Value: " << stats.avgValue << "\n"
+              << "  Average Time:     " << stats.avgTime << " s\n"
+              << "  25th Percentile:  " << stats.p25 << " s\n"
+              << "  Median Time:      " << stats.median << " s\n"
+              << "  75th Percentile:  " << stats.p75 << " s\n\n";
+
+    outFile << precision << "," << name << ","
+            << std::fixed << std::setprecision(precision) << stats.avgValue << ","
+            << stats.avgTime << "," << stats.p25 << "," << stats.median << "," << stats.p75 << "\n";
+}
+
+void runMonteCarloSimulations(int precision, unsigned long trials,
+                             unsigned threads, std::ofstream& outFile) {
+    runSimulation("Monte Carlo Single-thread with Uniform Sampling", 5, outFile, precision,
+                 monte_carlo_pi_singlethreaded_with_uniform, trials);
+
+    runSimulation("Monte Carlo Multi-thread using Pthread with Uniform Sampling", 5, outFile, precision,
+                 monte_carlo_pi_multithreaded_using_pthread_with_uniform, trials, threads);
+
+#ifdef _OPENMP
+    runSimulation("Monte Carlo Multi-thread using OpenMP with Uniform Sampling", 5, outFile, precision,
+                 monte_carlo_pi_multithreaded_using_omp_with_uniform, trials, threads);
+#endif
+
+    runSimulation("Monte Carlo Multi-thread using Pthread with Stratified Sampling by x-Coordinate", 5, outFile, precision,
+                 monte_carlo_pi_multithreaded_using_pthread_with_stratified_x, trials, threads);
+
+#ifdef _OPENMP
+    runSimulation("Monte Carlo Multi-thread using OpenMP with Stratified Sampling by x-Coordinate", 5, outFile, precision,
+                 monte_carlo_pi_multithreaded_using_omp_with_stratified_x, trials, threads);
+#endif
+
+    runSimulation("Monte Carlo Multi-thread using Pthread with Grid-based Stratified Sampling", 5, outFile, precision,
+                 monte_carlo_pi_multithreaded_using_pthread_with_stratified_grid, trials, std::sqrt(threads));
+
+#ifdef _OPENMP
+    runSimulation("Monte Carlo Multi-thread using OpenMP with Grid-based Stratified Sampling", 5, outFile, precision,
+                 monte_carlo_pi_multithreaded_using_omp_with_stratified_grid, trials, std::sqrt(threads));
+#endif
+}
+
+void runGregoryLeibnizSimulations(int precision, unsigned long iterations,
+                                  unsigned threads, std::ofstream& outFile) {
+    runSimulation("Gregory-Leibniz Multi-thread using Pthread", 5, outFile, precision,
+                 gregory_leibniz_pi_multithreaded_using_pthread, iterations, threads);
+
+    runSimulation("Gregory-Leibniz Multi-thread using OpenMP", 5, outFile, precision,
+                 gregory_leibniz_pi_multithreaded_using_omp, iterations, threads);
+}
+
 // ======================================================================
 // Main Function
 // ======================================================================
 int main() {
     printEnvironmentInfo();
 
-    // Write results to file
-    std::ofstream outFilePrecisionsMC("results_precisions_mc.csv");
-    if (!outFilePrecisionsMC) {
-        std::cerr << "Error opening file for writing.\n";
-        return 1;
-    }
-    outFilePrecisionsMC << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    std::ofstream mcPrecisions("results_precisions_mc.csv");
+    std::ofstream glPrecisions("results_precisions_gl.csv");
+    std::ofstream mcTrials("results_trials.csv");
+    
+    mcPrecisions << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    glPrecisions << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    mcTrials << "Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
 
-    // Write results to file
-    std::ofstream outFilePrecisionsGL("results_precisions_gl.csv");
-    if (!outFilePrecisionsGL) {
-        std::cerr << "Error opening file for writing.\n";
-        return 1;
-    }
-    outFilePrecisionsGL << "Precision,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    const unsigned threads = 16;
 
-    // List of target precisions: 5, 10, 15, and 20 decimal places.
-    std::vector<int> precisions = {5, 10, 15, 20};
+    const std::vector<int> precisions = {5, 10, 15, 20};
 
-    // For demonstration we limit the simulation trials/iterations.
-    const unsigned long long max_simulation_trials = 10000000ULL; // 10 million trials
-    const unsigned long long max_simulation_iterations = 10000000ULL; // 10 million iterations
-
-    unsigned int num_threads = 16;
-
+    // Precision-based simulations
     for (int precision : precisions) {
+        std::string mcTrialsStr = computeRequiredTrialsStrMC(precision);
+
         std::cout << GREEN << "Precision: " << precision << "\n\n";
 
-        std::string req_trials_str = computeRequiredTrialsStrMC(precision);
         std::cout << BLUE << "Required trials for Monte Carlo with " << precision << " decimal places: " 
-                  << req_trials_str << "\n";
-        std::cout << "Decimal precision set to: " << precision << " places\n";
+                  << mcTrialsStr << "\n";
 
-        // // For simulation, we use the maximum allowed trials (for demo purposes)
-        // unsigned long long trials = max_simulation_trials;
-        // std::cout << "Using " << trials << " trials for simulation.\n\n";
-        // Use actual trials computed from precision instead of a fixed maximum.
-        unsigned long long trials = computeRequiredTrialsMC(precision);
-        std::cout << "Using " << trials << " trials for simulation.\n\n";
+        unsigned long long mcTrials = computeRequiredTrialsMC(precision);
 
-        const int iterationsCount = 5;
+        std::cout << "Using " << mcTrials << " trials.\n\n" << RESET;
 
-        // Set output precision for simulation results
-        std::cout << RESET << std::fixed << std::setprecision(precision);
+        runMonteCarloSimulations(precision, mcTrials, threads, mcPrecisions);
+    }
 
-        // ---------------------------------------------------
-        // Monte Carlo: Single-threaded with uniform sampling
-        Stats mcSingleThreadedUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_singlethreaded_with_uniform, trials);
-        std::cout << "Monte Carlo Single-threaded with Uniform Sampling:\n"
-              << "  Average PI Value: " << mcSingleThreadedUniformStats.avgValue << "\n"
-              << "  Average Time:     " << mcSingleThreadedUniformStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcSingleThreadedUniformStats.p25 << " s\n"
-              << "  Median Time:      " << mcSingleThreadedUniformStats.median << " s\n"
-              << "  75th Percentile:  " << mcSingleThreadedUniformStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Single-threaded with Uniform Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcSingleThreadedUniformStats.avgValue << ","
-                << mcSingleThreadedUniformStats.avgTime << ","
-                << mcSingleThreadedUniformStats.p25 << ","
-                << mcSingleThreadedUniformStats.median << ","
-                << mcSingleThreadedUniformStats.p75 << "\n";
+    const int trialPrecision = 16;
 
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using pthread with uniform sampling
-        Stats mcMultiThreadedPtreadUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_uniform, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using pthread with Uniform Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedPtreadUniformStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedPtreadUniformStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedPtreadUniformStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedPtreadUniformStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedPtreadUniformStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using pthread with Uniform Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedPtreadUniformStats.avgValue << ","
-                << mcMultiThreadedPtreadUniformStats.avgTime << ","
-                << mcMultiThreadedPtreadUniformStats.p25 << ","
-                << mcMultiThreadedPtreadUniformStats.median << ","
-                << mcMultiThreadedPtreadUniformStats.p75 << "\n";
+    const std::vector<unsigned long long> trialCounts = {(1ULL << 24), (1ULL << 26), (1ULL << 28)};
 
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using OpenMP with uniform sampling
-#ifdef _OPENMP
-        Stats mcMultiThreadedOMPUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_uniform, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using OpenMP with Uniform Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedOMPUniformStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedOMPUniformStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedOMPUniformStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedOMPUniformStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedOMPUniformStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using OpenMP with Uniform Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedOMPUniformStats.avgValue << ","
-                << mcMultiThreadedOMPUniformStats.avgTime << ","
-                << mcMultiThreadedOMPUniformStats.p25 << ","
-                << mcMultiThreadedOMPUniformStats.median << ","
-                << mcMultiThreadedOMPUniformStats.p75 << "\n";
-#endif
+    // Trial-based simulations
+    for (auto trials : trialCounts) {
+        std::cout << GREEN << "\nTrials: " << trials << "\n" << RESET;
+    
+        runMonteCarloSimulations(trialPrecision, trials, threads, mcTrials);
+    }
 
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using pthread with stratified sampling by x–coordinate
-        Stats mcMultiThreadedPtreadStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_stratified_x, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using pthread with Stratified Sampling by x-Coordinate:\n"
-              << "  Average PI Value: " << mcMultiThreadedPtreadStratifiedXStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedPtreadStratifiedXStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedPtreadStratifiedXStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedPtreadStratifiedXStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedPtreadStratifiedXStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using pthread with Stratified Sampling by x-Coordinate,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedPtreadStratifiedXStats.avgValue << ","
-                << mcMultiThreadedPtreadStratifiedXStats.avgTime << ","
-                << mcMultiThreadedPtreadStratifiedXStats.p25 << ","
-                << mcMultiThreadedPtreadStratifiedXStats.median << ","
-                << mcMultiThreadedPtreadStratifiedXStats.p75 << "\n";
+    // Precision-based simulations
+    for (int precision : precisions) {
+        std::string glIterationsStr = computeRequiredIterationsStrGL(precision);
 
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using OpenMP with stratified sampling by x–coordinate
-#ifdef _OPENMP
-        Stats mcMultiThreadedOMPStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_stratified_x, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate:\n"
-              << "  Average PI Value: " << mcMultiThreadedOMPStratifiedXStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedOMPStratifiedXStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedOMPStratifiedXStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedOMPStratifiedXStats.avgValue << ","
-                << mcMultiThreadedOMPStratifiedXStats.avgTime << ","
-                << mcMultiThreadedOMPStratifiedXStats.p25 << ","
-                << mcMultiThreadedOMPStratifiedXStats.median << ","
-                << mcMultiThreadedOMPStratifiedXStats.p75 << "\n";
-#endif
+        std::cout << GREEN << "Precision: " << precision << "\n\n";
 
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using pthread with grid–based stratified sampling
-        Stats mcMultiThreadedPtreadStratifiedGridStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_stratified_grid, trials, sqrt(num_threads));
-        std::cout << "Monte Carlo Multi-threaded using pthread with Grid-based Stratified Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedPtreadStratifiedGridStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedPtreadStratifiedGridStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedPtreadStratifiedGridStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedPtreadStratifiedGridStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedPtreadStratifiedGridStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using pthread with Grid-based Stratified Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedPtreadStratifiedGridStats.avgValue << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.avgTime << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.p25 << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.median << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.p75 << "\n";
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using OpenMP with grid–based stratified sampling
-#ifdef _OPENMP
-        Stats mcMultiThreadedOMPStratifiedGridStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_stratified_grid, trials, sqrt(num_threads));
-        std::cout << "Monte Carlo Multi-threaded using OpenMP with Grid-based Stratified Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedOMPStratifiedGridStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedOMPStratifiedGridStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedOMPStratifiedGridStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedOMPStratifiedGridStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedGridStats.p75 << " s\n\n";
-        outFilePrecisionsMC << precision << ",Monte Carlo Multi-threaded using OpenMP with Grid-based Stratified Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedOMPStratifiedGridStats.avgValue << ","
-                << mcMultiThreadedOMPStratifiedGridStats.avgTime << ","
-                << mcMultiThreadedOMPStratifiedGridStats.p25 << ","
-                << mcMultiThreadedOMPStratifiedGridStats.median << ","
-                << mcMultiThreadedOMPStratifiedGridStats.p75 << "\n";
-#endif
-
-        std::string req_iterations_str = computeRequiredIterationsStrGL(precision);
         std::cout << BLUE << "Required iterations for Gregory-Leibniz with " << precision << " decimal places: " 
-                  << req_iterations_str << "\n";
-        std::cout << "Decimal precision set to: " << precision << " places\n";
+                  << glIterationsStr << "\n";
 
-        // // For simulation, we use the maximum allowed iterations (for demo purposes)
-        // unsigned long long iterations = max_simulation_iterations;
-        // std::cout << "Using " << iterations << " iterations for simulation.\n\n";
-        // Use actual iterations computed from precision instead of a fixed maximum.
-        unsigned long long iterations = computeRequiredIterationsGL(precision);
-        std::cout << "Using " << iterations << " iterations for simulation.\n\n";
+        unsigned long long glIterations = computeRequiredIterationsGL(precision);
 
-        // Set output precision for simulation results
-        std::cout << RESET << std::fixed << std::setprecision(precision);
+        std::cout << "Using " << glIterations << " iterations.\n\n" << RESET;
 
-        // ---------------------------------------------------
-        // Gregory-Leibniz Series: Multi-threaded using pthread
-        Stats glMultiThreadedPthreadStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multithreaded_using_pthread, iterations, num_threads);
-        std::cout << "Gregory-Leibniz Multi-threaded using pthread:\n"
-              << "  Average PI Value: " << glMultiThreadedPthreadStats.avgValue << "\n"
-              << "  Average Time:     " << glMultiThreadedPthreadStats.avgTime << " s\n"
-              << "  25th Percentile:  " << glMultiThreadedPthreadStats.p25 << " s\n"
-              << "  Median Time:      " << glMultiThreadedPthreadStats.median << " s\n"
-              << "  75th Percentile:  " << glMultiThreadedPthreadStats.p75 << " s\n\n";
-        outFilePrecisionsGL << precision << ",Gregory-Leibniz Multi-threaded using pthread,"
-                << std::fixed << std::setprecision(precision)
-                << glMultiThreadedPthreadStats.avgValue << ","
-                << glMultiThreadedPthreadStats.avgTime << ","
-                << glMultiThreadedPthreadStats.p25 << ","
-                << glMultiThreadedPthreadStats.median << ","
-                << glMultiThreadedPthreadStats.p75 << "\n";
-
-        // ---------------------------------------------------
-        // Gregory-Leibniz Series: Multi-threaded using OpenMP
-        Stats glMultiThreadedOMPStats = measureSimulation(iterationsCount, gregory_leibniz_pi_multithreaded_using_omp, iterations, num_threads);
-        std::cout << "Gregory-Leibniz Multi-threaded using OpenMP:\n"
-              << "  Average PI Value: " << glMultiThreadedOMPStats.avgValue << "\n"
-              << "  Average Time:     " << glMultiThreadedOMPStats.avgTime << " s\n"
-              << "  25th Percentile:  " << glMultiThreadedOMPStats.p25 << " s\n"
-              << "  Median Time:      " << glMultiThreadedOMPStats.median << " s\n"
-              << "  75th Percentile:  " << glMultiThreadedOMPStats.p75 << " s\n\n";
-        outFilePrecisionsGL << precision << ",Gregory-Leibniz Multi-threaded using OpenMP,"
-                << std::fixed << std::setprecision(precision)
-                << glMultiThreadedOMPStats.avgValue << ","
-                << glMultiThreadedOMPStats.avgTime << ","
-                << glMultiThreadedOMPStats.p25 << ","
-                << glMultiThreadedOMPStats.median << ","
-                << glMultiThreadedOMPStats.p75 << "\n";
-
-        std::cout << "------------------------------------------------------\n\n";
+        runGregoryLeibnizSimulations(precision, glIterations, threads, glPrecisions);
     }
 
-    outFilePrecisionsMC.close();
-
-    outFilePrecisionsGL.close();
-
-    // Write results to file
-    std::ofstream outFileTrials("results_trials.csv");
-    if (!outFileTrials) {
-        std::cerr << "Error opening file for writing.\n";
-        return 1;
-    }
-    outFileTrials << "Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
-
-    // Define the fixed trial counts.
-    std::vector<unsigned long long> trialCounts = { (1ULL << 24), (1ULL << 26), (1ULL << 28) };
-
-    int precision = 16;
-
-    for (unsigned long long trials : trialCounts) {
-        std::cout << GREEN << "Trials: " << trials << "\n\n";
-
-        const int iterationsCount = 5;
-
-        // Set output precision for simulation results
-        std::cout << RESET << std::fixed << std::setprecision(precision);
-
-        // ---------------------------------------------------
-        // Monte Carlo: Single-threaded with uniform sampling
-        Stats mcSingleThreadedUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_singlethreaded_with_uniform, trials);
-        std::cout << "Monte Carlo Single-threaded with Uniform Sampling:\n"
-              << "  Average PI Value: " << mcSingleThreadedUniformStats.avgValue << "\n"
-              << "  Average Time:     " << mcSingleThreadedUniformStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcSingleThreadedUniformStats.p25 << " s\n"
-              << "  Median Time:      " << mcSingleThreadedUniformStats.median << " s\n"
-              << "  75th Percentile:  " << mcSingleThreadedUniformStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Single-threaded with Uniform Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcSingleThreadedUniformStats.avgValue << ","
-                << mcSingleThreadedUniformStats.avgTime << ","
-                << mcSingleThreadedUniformStats.p25 << ","
-                << mcSingleThreadedUniformStats.median << ","
-                << mcSingleThreadedUniformStats.p75 << "\n";
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using pthread with uniform sampling
-        Stats mcMultiThreadedPtreadUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_uniform, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using pthread with Uniform Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedPtreadUniformStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedPtreadUniformStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedPtreadUniformStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedPtreadUniformStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedPtreadUniformStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Multi-threaded using pthread with Uniform Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedPtreadUniformStats.avgValue << ","
-                << mcMultiThreadedPtreadUniformStats.avgTime << ","
-                << mcMultiThreadedPtreadUniformStats.p25 << ","
-                << mcMultiThreadedPtreadUniformStats.median << ","
-                << mcMultiThreadedPtreadUniformStats.p75 << "\n";
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using OpenMP with uniform sampling
-#ifdef _OPENMP
-        Stats mcMultiThreadedOMPUniformStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_uniform, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using OpenMP with Uniform Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedOMPUniformStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedOMPUniformStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedOMPUniformStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedOMPUniformStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedOMPUniformStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Multi-threaded using OpenMP with Uniform Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedOMPUniformStats.avgValue << ","
-                << mcMultiThreadedOMPUniformStats.avgTime << ","
-                << mcMultiThreadedOMPUniformStats.p25 << ","
-                << mcMultiThreadedOMPUniformStats.median << ","
-                << mcMultiThreadedOMPUniformStats.p75 << "\n";
-#endif
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using pthread with stratified sampling by x–coordinate
-        Stats mcMultiThreadedPtreadStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_stratified_x, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using pthread with Stratified Sampling by x-Coordinate:\n"
-              << "  Average PI Value: " << mcMultiThreadedPtreadStratifiedXStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedPtreadStratifiedXStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedPtreadStratifiedXStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedPtreadStratifiedXStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedPtreadStratifiedXStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Multi-threaded using pthread with Stratified Sampling by x-Coordinate,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedPtreadStratifiedXStats.avgValue << ","
-                << mcMultiThreadedPtreadStratifiedXStats.avgTime << ","
-                << mcMultiThreadedPtreadStratifiedXStats.p25 << ","
-                << mcMultiThreadedPtreadStratifiedXStats.median << ","
-                << mcMultiThreadedPtreadStratifiedXStats.p75 << "\n";
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using OpenMP with stratified sampling by x–coordinate
-#ifdef _OPENMP
-        Stats mcMultiThreadedOMPStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_stratified_x, trials, num_threads);
-        std::cout << "Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate:\n"
-              << "  Average PI Value: " << mcMultiThreadedOMPStratifiedXStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedOMPStratifiedXStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedOMPStratifiedXStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedOMPStratifiedXStats.avgValue << ","
-                << mcMultiThreadedOMPStratifiedXStats.avgTime << ","
-                << mcMultiThreadedOMPStratifiedXStats.p25 << ","
-                << mcMultiThreadedOMPStratifiedXStats.median << ","
-                << mcMultiThreadedOMPStratifiedXStats.p75 << "\n";
-#endif
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using pthread with grid–based stratified sampling
-        Stats mcMultiThreadedPtreadStratifiedGridStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_stratified_grid, trials, sqrt(num_threads));
-        std::cout << "Monte Carlo Multi-threaded using pthread with Grid-based Stratified Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedPtreadStratifiedGridStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedPtreadStratifiedGridStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedPtreadStratifiedGridStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedPtreadStratifiedGridStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedPtreadStratifiedGridStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Multi-threaded using pthread with Grid-based Stratified Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedPtreadStratifiedGridStats.avgValue << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.avgTime << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.p25 << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.median << ","
-                << mcMultiThreadedPtreadStratifiedGridStats.p75 << "\n";
-
-        // ---------------------------------------------------
-        // Monte Carlo: Multi-threaded using OpenMP with grid–based stratified sampling
-#ifdef _OPENMP
-        Stats mcMultiThreadedOMPStratifiedGridStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_stratified_grid, trials, sqrt(num_threads));
-        std::cout << "Monte Carlo Multi-threaded using OpenMP with Grid-based Stratified Sampling:\n"
-              << "  Average PI Value: " << mcMultiThreadedOMPStratifiedGridStats.avgValue << "\n"
-              << "  Average Time:     " << mcMultiThreadedOMPStratifiedGridStats.avgTime << " s\n"
-              << "  25th Percentile:  " << mcMultiThreadedOMPStratifiedGridStats.p25 << " s\n"
-              << "  Median Time:      " << mcMultiThreadedOMPStratifiedGridStats.median << " s\n"
-              << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedGridStats.p75 << " s\n\n";
-        outFileTrials << trials << ",Monte Carlo Multi-threaded using OpenMP with Grid-based Stratified Sampling,"
-                << std::fixed << std::setprecision(precision)
-                << mcMultiThreadedOMPStratifiedGridStats.avgValue << ","
-                << mcMultiThreadedOMPStratifiedGridStats.avgTime << ","
-                << mcMultiThreadedOMPStratifiedGridStats.p25 << ","
-                << mcMultiThreadedOMPStratifiedGridStats.median << ","
-                << mcMultiThreadedOMPStratifiedGridStats.p75 << "\n";
-#endif
-
-        std::cout << "------------------------------------------------------\n\n";
-    }
-
-    outFileTrials.close();
+    mcPrecisions.close();
+    glPrecisions.close();
+    mcTrials.close();
 
     return 0;
 }
