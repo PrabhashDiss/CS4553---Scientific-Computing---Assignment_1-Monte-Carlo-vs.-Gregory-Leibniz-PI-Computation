@@ -132,7 +132,25 @@ struct Stats {
     double median;
     double p75;
     mp_decimal_float avgValue;
+    mp_decimal_float absoluteError;
 };
+
+// Function to format absolute error
+std::string formatAbsoluteError(const mp_decimal_float& value, int precision = 10) {
+    // Convert to double for formatting (this may lose some precision).
+    double dVal = static_cast<double>(value);
+    if (dVal == 0.0) {
+        return "0";
+    }
+    // Compute exponent: floor(log10(|value|))
+    int exponent = static_cast<int>(std::floor(std::log10(std::fabs(dVal))));
+    double mantissa = dVal / std::pow(10, exponent);
+
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(precision) << mantissa;
+    oss << " * 10^" << exponent;
+    return oss.str();
+}
 
 // Generic measurement function that accepts a simulation function and its arguments.
 template<typename Func, typename... Args>
@@ -167,6 +185,13 @@ Stats measureSimulation(int iterations, Func simulation, Args&&... args) {
     stats.median = sortedTimes[static_cast<size_t>(0.5 * n)];
     stats.p75 = sortedTimes[static_cast<size_t>(0.75 * n)];
 
+    // Define a high-precision true value of π.
+    mp_decimal_float true_pi("3.141592653589793238462643383279502884197");
+
+    // Calculate the absolute error.
+    stats.absoluteError = (stats.avgValue >= true_pi) ? (stats.avgValue - true_pi)
+                                                     : (true_pi - stats.avgValue);
+
     return stats;
 }
 
@@ -179,13 +204,14 @@ void runSimulation(const std::string& name, int iterations, std::ofstream& outFi
     std::cout << name << ":\n"
               << std::fixed << std::setprecision(precision)
               << "  Average PI Value: " << stats.avgValue << "\n"
+              << "  Absolute Error:   " << formatAbsoluteError(stats.absoluteError, precision) << "\n"
               << "  Average Time:     " << stats.avgTime << " s\n"
               << "  25th Percentile:  " << stats.p25 << " s\n"
               << "  Median Time:      " << stats.median << " s\n"
               << "  75th Percentile:  " << stats.p75 << " s\n\n";
 
     outFile << precision << "," << name << ","
-            << std::fixed << std::setprecision(precision) << stats.avgValue << ","
+            << std::fixed << std::setprecision(precision) << stats.avgValue << "," << formatAbsoluteError(stats.absoluteError, precision) << ","
             << stats.avgTime << "," << stats.p25 << "," << stats.median << "," << stats.p75 << "\n";
 }
 
