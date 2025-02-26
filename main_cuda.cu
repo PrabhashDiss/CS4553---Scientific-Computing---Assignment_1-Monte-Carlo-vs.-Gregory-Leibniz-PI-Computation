@@ -257,7 +257,7 @@ void run_precision_study() {
         auto run = [&](auto sampler, const std::string& name) {
             auto stats = measureSimulation(runs, [=]{ return cuda_monte_carlo(trials, sampler); });
             report_results("results_precisions_mc.csv", 
-                std::to_string(precision)+","+name, precision, trials, stats);
+                name, precision, trials, stats);
         };
 
         run(uniform_sampler, "CUDA Uniform");
