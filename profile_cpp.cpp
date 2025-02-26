@@ -71,15 +71,15 @@ int main() {
     std::cout << std::fixed << std::setprecision(precision);
 
     // ---------------------------------------------------
-    // Monte Carlo: Multi-threaded using OpenMP with stratified sampling by x–coordinate
+    // Monte Carlo: Multi-threaded using pthread with stratified sampling by x–coordinate
 #ifdef _OPENMP
-    Stats mcMultiThreadedOMPStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_omp_with_stratified_x, trials, num_threads);
-    std::cout << "Monte Carlo Multi-threaded using OpenMP with Stratified Sampling by x-Coordinate:\n"
-            << "  Average PI Value: " << mcMultiThreadedOMPStratifiedXStats.avgValue << "\n"
-            << "  Average Time:     " << mcMultiThreadedOMPStratifiedXStats.avgTime << " s\n"
-            << "  25th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p25 << " s\n"
-            << "  Median Time:      " << mcMultiThreadedOMPStratifiedXStats.median << " s\n"
-            << "  75th Percentile:  " << mcMultiThreadedOMPStratifiedXStats.p75 << " s\n\n";
+    Stats mcMultiThreadedPthreadStratifiedXStats = measureSimulation(iterationsCount, monte_carlo_pi_multithreaded_using_pthread_with_stratified_x, trials, num_threads);
+    std::cout << "Monte Carlo Multi-threaded using Pthread with Stratified Sampling by x-Coordinate:\n"
+            << "  Average PI Value: " << mcMultiThreadedPthreadStratifiedXStats.avgValue << "\n"
+            << "  Average Time:     " << mcMultiThreadedPthreadStratifiedXStats.avgTime << " s\n"
+            << "  25th Percentile:  " << mcMultiThreadedPthreadStratifiedXStats.p25 << " s\n"
+            << "  Median Time:      " << mcMultiThreadedPthreadStratifiedXStats.median << " s\n"
+            << "  75th Percentile:  " << mcMultiThreadedPthreadStratifiedXStats.p75 << " s\n\n";
 #endif
 
     std::cout << "------------------------------------------------------\n\n";
