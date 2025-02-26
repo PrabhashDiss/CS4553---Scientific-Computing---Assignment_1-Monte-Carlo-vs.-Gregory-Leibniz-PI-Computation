@@ -1,4 +1,4 @@
-==PROF== Connected to process 38984 (/teamspace/studios/this_studio/CS4553---Scientific-Computing---Assignment_1-Monte-Carlo-vs.-Gregory-Leibniz-PI-Computation/prof_cuda)
+==PROF== Connected to process 22836 (/teamspace/studios/this_studio/CS4553---Scientific-Computing---Assignment_1-Monte-Carlo-vs.-Gregory-Leibniz-PI-Computation/prof_cuda)
 ==PROF== Profiling "monte_carlo_kernel" - 0: 0%....50%....100% - 40 passes
 ==PROF== Profiling "monte_carlo_kernel" - 1: 0%....50%....100% - 40 passes
 ==PROF== Profiling "monte_carlo_kernel" - 2: 0%....50%....100% - 40 passes
@@ -6,12 +6,12 @@
 ==PROF== Profiling "monte_carlo_kernel" - 4: 0%....50%....100% - 40 passes
 Monte Carlo Multi-threaded using CUDA with Uniform Sampling:
   Average PI Value: 3.1416879999999998
-  Average Time:     2.0953433830000003 s
-  25th Percentile:  1.8273305600000000 s
-  Median Time:      1.8294089940000000 s
-  75th Percentile:  1.8339532690000000 s
+  Average Time:     2.0521413663999999 s
+  25th Percentile:  1.8391290469999999 s
+  Median Time:      1.8454787779999999 s
+  75th Percentile:  1.8495174889999999 s
 
 ------------------------------------------------------
 
-==PROF== Disconnected from process 38984
+==PROF== Disconnected from process 22836
 ==PROF== Report: /teamspace/studios/this_studio/CS4553---Scientific-Computing---Assignment_1-Monte-Carlo-vs.-Gregory-Leibniz-PI-Computation/profile.ncu-rep
