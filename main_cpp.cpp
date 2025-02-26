@@ -264,9 +264,9 @@ int main() {
     std::ofstream glPrecisions("results_precisions_gl.csv");
     std::ofstream mcTrials("results_trials.csv");
     
-    mcPrecisions << "Precision,Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
-    glPrecisions << "Precision,Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
-    mcTrials << "Precision,Trials,Simulation Type,Average PI Value,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    mcPrecisions << "Precision,Trials,Simulation Type,Average PI Value,Absolute Error,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    glPrecisions << "Precision,Trials,Simulation Type,Average PI Value,Absolute Error,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
+    mcTrials << "Precision,Trials,Simulation Type,Average PI Value,Absolute Error,Average Time (s),25th Percentile (s),Median Time (s),75th Percentile (s)\n";
 
     const unsigned threads = 16;
 
